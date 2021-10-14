@@ -11,8 +11,10 @@ class ddpp():  # Saves Required Data (config dicts)
         self.variables = {}
 
     def importddpp(self):
-        # Import all config files into dictionaries
-
+        '''
+        imports the config.ddpp file as a the config dictionary,
+        as well as the character.var and custom.var as a dictionary of variables.
+        '''
         with open("config.ddpp") as config:
             for line in config:
                 line = line.replace("\n", "")
@@ -35,10 +37,9 @@ class ddpp():  # Saves Required Data (config dicts)
                 localvar = {var[0]: var[1]}
                 self.variables.update(localvar)
 
-
 def s_roll(number, die):  # Rolls an amount of the same dice
     """
-    return an integer
+    returns an int
 
     generates a random number based on amount of sides of the die and the number of dice
     """
@@ -51,6 +52,8 @@ def s_roll(number, die):  # Rolls an amount of the same dice
 
 def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
     """
+    returns 2 variables: total (an integer) and rolls (a string)
+
     returns a number and a string, based on rolls and modifiers parsed from instructions
     """
     total = 0  # Running total
@@ -76,7 +79,9 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
 
 def replace_variables(instructions, variables):  # Replaces variables in instructions by concrete values
     """
-    replaces variables with numbers parsed from a .var file
+    returns sanitized input, an instruction set which mult_roll can accept
+
+    replaces variables with numbers parsed from a .var file and recreates the output
     """
     sanitized = []
     for instruction in instructions:
@@ -103,7 +108,7 @@ def roll_from_list(name, dict, var):  # Rolls a roll defined in the config
     return mult_roll(replace_variables(dict.get(name), var))
 
 
-def roll_from_string(input, var):  # Rolls Rol defined in String
+def roll_from_string(input, var):  # Rolls Roll defined in String
     inputs = input.split(" ")
     return mult_roll(replace_variables(inputs, var))
 
@@ -151,7 +156,10 @@ def random_from_file(filepaths):  # Picks entry in rolling table
 
 
 def death_save():
-    failures = 0
+    """
+    creates an interactive prompt that helps your roll death saves
+    """
+    failures = 0 # initialise failures and successes to 0
     successes = 0
     adv = input("Do you have advantage on death saves? (yes/no)")
     while failures < 3 and successes < 3:
