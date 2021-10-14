@@ -160,12 +160,3 @@ def deathsave():
         print("You are stable")
     if failures == 3:
         print("You are dead")
-
-
-instance = ddpp()
-ddpp.importddpp(instance)
-print("Roll from dict: " + str(roll_from_list("test", instance.config, instance.variables)[0]))
-print("Roll fromString: " + str(roll_from_string("1d12 +2", instance.variables)))
-print("Average from dict: " + str(avg_from_list("big", instance.config, instance.variables)))
-print("Average fom string w/ replace var: " + str(avg_from_string("1d1 +[Dexterity]", instance.variables)))
-print("Replace Var: " + str(roll_from_list("strength_check", instance.config, instance.variables)))
