@@ -2,6 +2,7 @@ def varMaker(variable):
     with open("character.var", "a") as file:
         file.write(variable)
 
+
 def proMaker(proficiency):
     with open("proficiencies.var", "a") as file:
         file.write(proficiency)
