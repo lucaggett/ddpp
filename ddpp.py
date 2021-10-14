@@ -1,21 +1,24 @@
 import random
 import re
+import timeit
 from typing import Dict, Any
 
 
-class ddpp():
+class ddpp():  # Saves Required Data (config dicts)
     def __init__(self):
-        self.dict = {}
+        self.config = {}
         self.i = 0
         self.variables = {}
 
     def importddpp(self):
+        # Import all config files into dictionaries
+
         with open("config.ddpp") as config:
             for line in config:
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
                 localdict = {line_tok[0]: line_tok[1:len(line_tok)]}
-                self.dict.update(localdict)
+                self.config.update(localdict)
                 self.i += 1
 
         with open("character.var") as character:
@@ -24,6 +27,7 @@ class ddpp():
                 stat = stat.split(" ")
                 localstat = {stat[0]: stat[1]}
                 self.variables.update(localstat)
+
         with open("custom.var") as custom:
             for variable in custom:
                 var = var.replace("\n", "")
@@ -32,7 +36,7 @@ class ddpp():
                 self.variables.update(localvar)
 
 
-def s_roll(number, die):
+def s_roll(number, die):  # Rolls an amount of the same dice
     total = 0
     for i in range(0, number):
         roll = random.randrange(1, die, 1)
@@ -40,74 +44,64 @@ def s_roll(number, die):
     return total
 
 
-def mult_roll(instructions):
-    total = 0
-    rolls = ""
+def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
+    total = 0  # Running total
+    rolls = ""  # Justification
     for instruction in instructions:
-        if instruction.find("+") >= 0:
-            # print("addition")
+        if instruction.find("+") >= 0:  # Positive Modifier
             numbers = re.sub("\D", "", instruction)
             total += int(numbers)
             rolls += str(numbers) + " + "
-            # print(total)
-        elif instruction.find("-") >= 0:
-            # print("subtraction")
+        elif instruction.find("-") >= 0:  # Negative Modifier
             numbers = re.sub("\D", "", instruction)
             total -= int(numbers)
             rolls += str(numbers) + " + "
-            # print(total)
-        elif instruction.find("d") > 0:
-            # print("dice")
+        elif instruction.find("d") > 0:  # Dice Roll
             args = instruction.split("d")
-            # print(args)
-            # print(s_roll(int(args[0]), int(args[1])))
             result = s_roll(int(args[0]), int(args[1]))
             total += result
             rolls += str(result) + " + "
-        else:
+        else:  # Invalid Input
             pass
-            # print("invalid")
     return total, rolls[:-3]
 
 
-def replace_variables(instructions, variables):
+def replace_variables(instructions, variables):  # Replaces variables in instructions by concrete values
     sanitized = []
     for instruction in instructions:
         instruction_positive = True
         variable_positive = True
-        if instruction.find("[") >= 0:
-            if instruction.find("-") >= 0:
+        if instruction.find("[") >= 0:  # If is variable
+            if instruction.find("-") >= 0:  # If instruction is subtractive
                 instruction_positive = False
             variable_name = re.sub("[^A-Za-z]", "", instruction)
             variable = str(variables.get(variable_name))
-            if variable.find("-"):
+            if variable.find("-"):  # If value of variable is negative
                 variable_positive = False
             variable = re.sub("\D", "", variable)
-            if variable_positive == instruction_positive:
+            if variable_positive == instruction_positive:  # If ++ or -- (thus + in total)
                 sanitized.append("+" + str(variable))
-            else:
+            else:  # If +- or -+ (thus - in total)
                 sanitized.append("+" + str(variable))
-        else:
+        else:  # If no instruction
             sanitized.append(instruction)
     return sanitized
 
 
-def roll_from_dict(name, dict, var):
-    # print(dict.get(name))
+def roll_from_list(name, dict, var):  # Rolls a roll defined in the config
     return mult_roll(replace_variables(dict.get(name), var))
 
 
-def roll_from_string(input, var):
+def roll_from_string(input, var):  # Rolls Rol defined in String
     inputs = input.split(" ")
     return mult_roll(replace_variables(inputs, var))
 
 
-def s_avg(number, die):
-    # returns the average value of an amoutn of the same die
-    return number * ((1 + die) / 2);
+def s_avg(number, die):  # Returns the average value of an amoutn of the same die
+    return number * ((1 + die) / 2)
 
 
-def mult_avg(instructions):
+def mult_avg(instructions):  # Returns the average of an arbitrary roll
     total = 0
     for instruction in instructions:
         if instruction.find("+") >= 0:
@@ -126,16 +120,16 @@ def mult_avg(instructions):
     return total
 
 
-def avg_from_dict(name, dict, var):
+def avg_from_list(name, dict, var):
     return mult_avg(replace_variables(dict.get(name), var))
 
 
 def avg_from_string(input, var):
     inputs = input.split(" ")
-    return mult_avg(replace_variables(inputs,var))
+    return mult_avg(replace_variables(inputs, var))
 
 
-def random_from_file(filepaths):
+def random_from_file(filepaths):  # Picks entry in rolling table
     filepaths = filepaths.split(" ")
     choices = []
     for file in filepaths:
@@ -143,6 +137,7 @@ def random_from_file(filepaths):
         picked = re.sub("(\n|\W)", "", picked)
         choices.append(picked)
     return " ".join(choices)
+
 
 def deathsave():
     failures = 0
@@ -169,11 +164,8 @@ def deathsave():
 
 instance = ddpp()
 ddpp.importddpp(instance)
-# print(instance.dict)
-# rint(type(instance.dict))
-print("Roll from dict: " + str(roll_from_dict("test", instance.dict, instance.variables)[0]))
-print("Roll fromString: " + str(roll_from_string("1d12 +2", instance.variables)) + "       '1d12 +2'")
-print("Average from dict: " + str(avg_from_dict("big", instance.dict, instance.variables)))
-print("Average fom string w/ replace var: " + str(avg_from_string("1d1 +[DEX]", instance.variables)) + "    '1d1 +[DEX]'")
-print("Replace Var: " + str(roll_from_dict("strength_check", instance.dict, instance.variables)))
-deathsave()
+print("Roll from dict: " + str(roll_from_list("test", instance.config, instance.variables)[0]))
+print("Roll fromString: " + str(roll_from_string("1d12 +2", instance.variables)))
+print("Average from dict: " + str(avg_from_list("big", instance.config, instance.variables)))
+print("Average fom string w/ replace var: " + str(avg_from_string("1d1 +[Dexterity]", instance.variables)))
+print("Replace Var: " + str(roll_from_list("strength_check", instance.config, instance.variables)))
