@@ -37,6 +37,11 @@ class ddpp():  # Saves Required Data (config dicts)
 
 
 def s_roll(number, die):  # Rolls an amount of the same dice
+    """
+    return an integer
+
+    generates a random number based on amount of sides of the die and the number of dice
+    """
     total = 0
     for i in range(0, number):
         roll = random.randrange(1, die, 1)
@@ -45,6 +50,9 @@ def s_roll(number, die):  # Rolls an amount of the same dice
 
 
 def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
+    """
+    returns a number and a string, based on rolls and modifiers parsed from instructions
+    """
     total = 0  # Running total
     rolls = ""  # Justification
     for instruction in instructions:
@@ -67,6 +75,9 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
 
 
 def replace_variables(instructions, variables):  # Replaces variables in instructions by concrete values
+    """
+    replaces variables with numbers parsed from a .var file
+    """
     sanitized = []
     for instruction in instructions:
         instruction_positive = True
@@ -139,7 +150,7 @@ def random_from_file(filepaths):  # Picks entry in rolling table
     return " ".join(choices)
 
 
-def deathsave():
+def death_save():
     failures = 0
     successes = 0
     adv = input("Do you have advantage on death saves? (yes/no)")
