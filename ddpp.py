@@ -24,6 +24,12 @@ class ddpp():
                 stat = stat.split(" ")
                 localstat = {stat[0]: stat[1]}
                 self.variables.update(localstat)
+        with open("custom.var") as custom:
+            for variable in custom:
+                var = var.replace("\n", "")
+                var = var.split(" ")
+                localvar = {var[0]: var[1]}
+                self.variables.update(localvar)
 
 
 def s_roll(number, die):
@@ -116,7 +122,27 @@ def random_from_file(filepaths):
         choices.append(picked)
     return " ".join(choices)
 
-
+def deathsave():
+    failures = 0
+    successes = 0
+    adv = input("Do you have advantage on death saves? (yes/no)")
+    while failures < 3 and successes < 3:
+        input("Press Enter for your next death save")
+        result = s_roll(1, 20)
+        if adv == "yes":
+            advroll = s_roll(1, 20)
+            if advroll > result:
+                result = advroll
+        print("You rolled " + str(result))
+        if result < 10:
+            failures += 1
+        else:
+            successes += 1
+        print(f"Failures: {failures} | Successes: {successes}")
+    if successes == 3:
+        print("You are stable")
+    if failures == 3:
+        print("You are dead")
 
 
 instance = ddpp()
@@ -128,3 +154,4 @@ print(roll_from_string("1d12 +2"))
 print("Average: " + str(avg_from_dict("big", instance.dict)))
 print(random_from_file("/home/roses/Documents/DnD-/firstnames.txt /home/roses/Documents/DnD-/lastnames.txt"))
 print(instance.variables)
+deathsave()

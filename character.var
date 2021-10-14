@@ -1,6 +1,7 @@
-STR +4
-DEX +1
-CON 0
-INT +3
-WIS +3
-CHA +5
+Strength +8
+Dexterity +1
+Constitution 0
+Intelligence +1
+Wisdom 0
+Charisma -1
+PRO +3
