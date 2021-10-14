@@ -65,25 +65,35 @@ def mult_roll(instructions):
 
 
 def replace_variables(instructions, variables):
+    sanitized = []
     for instruction in instructions:
+        instruction_positive = True
+        variable_positive = True
         if instruction.find("[") >= 0:
             if instruction.find("-") >= 0:
-                variable_name = re.sub("/W", "", instruction)
-                instruction = "-" + str(variables.get(variable_name))
+                instruction_positive = False
+            variable_name = re.sub("[^A-Za-z]", "", instruction)
+            variable = str(variables.get(variable_name))
+            if variable.find("-"):
+                variable_positive = False
+            variable = re.sub("\D", "", variable)
+            if variable_positive == instruction_positive:
+                sanitized.append("+" + str(variable))
             else:
-                variable_name = re.sub("/W", "", instruction)
-                instruction = "+" + str(variables.get(variable_name))
-    return instructions
+                sanitized.append("+" + str(variable))
+        else:
+            sanitized.append(instruction)
+    return sanitized
 
 
-def roll_from_dict(name, dict):
+def roll_from_dict(name, dict, var):
     # print(dict.get(name))
-    return mult_roll(dict.get(name))
+    return mult_roll(replace_variables(dict.get(name), var))
 
 
-def roll_from_string(input):
+def roll_from_string(input, var):
     inputs = input.split(" ")
-    return mult_roll(inputs)
+    return mult_roll(replace_variables(inputs, var))
 
 
 def s_avg(number, die):
@@ -110,13 +120,13 @@ def mult_avg(instructions):
     return total
 
 
-def avg_from_dict(name, dict):
-    return mult_avg(dict.get(name))
+def avg_from_dict(name, dict, var):
+    return mult_avg(replace_variables(dict.get(name), var))
 
 
-def avg_from_string(input):
+def avg_from_string(input, var):
     inputs = input.split(" ")
-    return mult_avg(inputs)
+    return mult_avg(replace_variables(inputs,var))
 
 
 def random_from_file(filepaths):
@@ -135,8 +145,8 @@ instance = ddpp()
 ddpp.importddpp(instance)
 # print(instance.dict)
 # rint(type(instance.dict))
-print(instance.variables)
-print("Roll from dict: " + str(roll_from_dict("test", instance.dict)[0]))
-print("Roll fromString: " + str(roll_from_string("1d12 +2")))
-print("Average: " + str(avg_from_dict("big", instance.dict)))
-print("Roll from dict with var: " + str(roll_from_dict("strength_check", instance.dict)))
+print("Roll from dict: " + str(roll_from_dict("test", instance.dict, instance.variables)[0]))
+print("Roll fromString: " + str(roll_from_string("1d12 +2", instance.variables)) + "       '1d12 +2'")
+print("Average from dict: " + str(avg_from_dict("big", instance.dict, instance.variables)))
+print("Average fom string w/ replace var: " + str(avg_from_string("1d1 +[DEX]", instance.variables)) + "    '1d1 +[DEX]'")
+print("Replace Var: " + str(roll_from_dict("strength_check", instance.dict, instance.variables)))
