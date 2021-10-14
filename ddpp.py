@@ -10,6 +10,7 @@ class ddpp():
     def __init__(self):
         self.dict = {}
         self.i = 0
+        self.variables = {}
 
     def importddpp(self):
         with open("config.ddpp") as config:
@@ -35,7 +36,12 @@ def mult_roll(instructions):
     total = 0
     rolls = ""
     for instruction in instructions:
-        if instruction.find("+") >= 0:
+        if instruction.find("[") > 0:
+            if instruction.find("+"):
+                variable_name = re.sub("/W", "", instruction)
+                total +=
+
+        elif instruction.find("+") >= 0:
             # print("addition")
             numbers = re.sub("\D", "", instruction)
             total += int(numbers)
