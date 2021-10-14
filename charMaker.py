@@ -2,17 +2,20 @@ def varMaker(variable):
     with open("character.var", "a") as file:
         file.write(variable)
 
+def proMaker(proficiency):
+    with open("proficiencies.var", "a") as file:
+        file.write(proficiency)
 
-x = input("Welcome to the Character Maker! \nPlease enter your strength modifier! :")
-varMaker(f"STR {x}\n")
-x = input("Please enter your dexterity modifier! : ")
-varMaker(f"DEX {x}\n")
-x = input("Please enter your constitution modifier! : ")
-varMaker(f"CON {x}\n")
-x = input("Please enter your intelligence modifier! : ")
-varMaker(f"INT {x}\n")
-x = input("Please enter your wisdom modifier! : ")
-varMaker(f"WIS {x}\n")
-x = input("Please enter your charisma modifier! : ")
-varMaker(f"CHA {x}\n")
 
+stats = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
+
+print("Welcome to the Character Maker!")
+for stat in stats:
+    x = input(f"Please enter your {stat} modifier! :")
+    varMaker(f"{stat} {x}\n")
+x = input("Please enter your Proficiency Bonus")
+varMaker(f"PRO {x}")
+x = input("please enter your proficiencies, seperated by spaces : ")
+x = x.split(" ")
+for proficiency in x:
+    proMaker(proficiency)
