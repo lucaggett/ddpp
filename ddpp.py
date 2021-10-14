@@ -4,12 +4,10 @@ from typing import Dict, Any
 
 
 class ddpp():
-    dict = []
-    i = 0
-
     def __init__(self):
         self.dict = {}
         self.i = 0
+        self.variables = {}
 
     def importddpp(self):
         with open("config.ddpp") as config:
@@ -20,7 +18,12 @@ class ddpp():
                 self.dict.update(localdict)
                 self.i += 1
 
-    # it stands for singular, doofus
+        with open("character.var") as character:
+            for stat in character:
+                stat = stat.replace("\n", "")
+                stat = stat.split(" ")
+                localstat = {stat[0]: stat[1]}
+                self.variables.update(localstat)
 
 
 def s_roll(number, die):
@@ -114,6 +117,8 @@ def random_from_file(filepaths):
     return " ".join(choices)
 
 
+
+
 instance = ddpp()
 ddpp.importddpp(instance)
 # print(instance.dict)
@@ -122,3 +127,4 @@ print(roll_from_dict("test", instance.dict))
 print(roll_from_string("1d12 +2"))
 print("Average: " + str(avg_from_dict("big", instance.dict)))
 print(random_from_file("/home/roses/Documents/DnD-/firstnames.txt /home/roses/Documents/DnD-/lastnames.txt"))
+print(instance.variables)
