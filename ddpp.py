@@ -38,12 +38,7 @@ def mult_roll(instructions):
     total = 0
     rolls = ""
     for instruction in instructions:
-        if instruction.find("[") > 0:
-            if instruction.find("+"):
-                variable_name = re.sub("/W", "", instruction)
-                total +=
-
-        elif instruction.find("+") >= 0:
+        if instruction.find("+") >= 0:
             # print("addition")
             numbers = re.sub("\D", "", instruction)
             total += int(numbers)
@@ -67,6 +62,18 @@ def mult_roll(instructions):
             pass
             # print("invalid")
     return total, rolls[:-3]
+
+
+def replace_variables(instructions, variables):
+    for instruction in instructions:
+        if instruction.find("[") >= 0:
+            if instruction.find("-") >= 0:
+                variable_name = re.sub("/W", "", instruction)
+                instruction = "-" + str(variables.get(variable_name))
+            else:
+                variable_name = re.sub("/W", "", instruction)
+                instruction = "+" + str(variables.get(variable_name))
+    return instructions
 
 
 def roll_from_dict(name, dict):
@@ -128,8 +135,8 @@ instance = ddpp()
 ddpp.importddpp(instance)
 # print(instance.dict)
 # rint(type(instance.dict))
-print(roll_from_dict("test", instance.dict))
-print(roll_from_string("1d12 +2"))
-print("Average: " + str(avg_from_dict("big", instance.dict)))
-print(random_from_file("/home/roses/Documents/DnD-/firstnames.txt /home/roses/Documents/DnD-/lastnames.txt"))
 print(instance.variables)
+print("Roll from dict: " + str(roll_from_dict("test", instance.dict)[0]))
+print("Roll fromString: " + str(roll_from_string("1d12 +2")))
+print("Average: " + str(avg_from_dict("big", instance.dict)))
+print("Roll from dict with var: " + str(roll_from_dict("strength_check", instance.dict)))
