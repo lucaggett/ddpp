@@ -26,7 +26,10 @@ class ddpp():
                 self.variables.update(localstat)
         with open("custom.var") as custom:
             for variable in custom:
-                
+                var = var.replace("\n", "")
+                var = var.split(" ")
+                localvar = {var[0]: var[1]}
+                self.variables.update(localvar)
 
 
 def s_roll(number, die):
