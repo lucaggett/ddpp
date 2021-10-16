@@ -2,6 +2,7 @@ import random
 import re
 import timeit
 from typing import Dict, Any
+import pprint
 
 
 class ddpp():  # Saves Required Data (config dicts)
@@ -36,6 +37,7 @@ class ddpp():  # Saves Required Data (config dicts)
                 var = var.split(" ")
                 localvar = {var[0]: var[1]}
                 self.variables.update(localvar)
+
 
 def s_roll(number, die):  # Rolls an amount of the same dice
     """
@@ -107,8 +109,8 @@ def roll_from_list(name, dict, var):  # Rolls a roll defined in the config
     return mult_roll(replace_variables(dict.get(name), var))
 
 
-def roll_from_string(input, var):  # Rolls Roll defined in String
-    inputs = input.split(" ")
+def roll_from_string(inputt, var):  # Rolls Roll defined in String
+    inputs = inputt.split(" ")
     return mult_roll(replace_variables(inputs, var))
 
 
@@ -154,26 +156,69 @@ def random_from_file(filepaths):  # Picks entry in rolling table
     return " ".join(choices)
 
 
+def initiative_tracker():
+    initiative_temp = {}
+    active = True
+    initiative = {}
+    number = input("enter the number of entities in the initiative: ")
+    for i in range(0, int(number)):
+        name = input("enter your entities name")
+        speed = input("enter the initiative of your character")
+        initiative.update({name: speed})
+    print("beginning initiative")
+    i = 0
+    # noinspection PyTypeChecker
+    initiative = dict(sorted(initiative.items(), key=lambda item: item[1]))
+    initiative_temp = initiative
+    while active:
+        if initiative_temp is not {}:
+            initative = initiative_temp
+        for entity in initiative:
+            print("Entity:", entity, "| Initiative:", initiative.get(entity))
+            x = input("possible commands: add, remove, print, exit (press enter for next creature)")
+            if x == "add":
+                name = input("enter the name of your creature")
+                speed = input("enter the initiative of your creature")
+                initiative_temp.update({name: speed})
+                # noinspection PyTypeChecker
+                initiative_temp = dict(sorted(initiative_temp.items(), key=lambda item: item[1]))
+            if x == "remove":
+                toRemove = input("enter the name of the creature you want to remove")
+                print(toRemove)
+                pprint.pprint(initiative_temp, width=1)
+                if initiative_temp.pop(toRemove, -100) == -100:
+                    print("entity not found")
+                else:
+                    print(f"{toRemove} will be removed at the start of the initiative")
+            if x == "print":
+                pprint.pprint(initiative, width=1)
+            if x == "exit":
+                active = False
+
+
 def death_save():
     """
     creates an interactive prompt that helps your roll death saves
     """
-    failures = 0 # initialise failures and successes to 0
+    failures = 0  # initialise failures and successes to 0
     successes = 0
     adv = input("Do you have advantage on death saves? (yes/no)")
     while failures < 3 and successes < 3:
         input("Press Enter for your next death save")
         result = s_roll(1, 20)
-        if adv == "yes":
+        if adv == "yes" or adv == "yup":
             advroll = s_roll(1, 20)
+            oldroll = result
             if advroll > result:
                 result = advroll
-        print("You rolled " + str(result))
+            print("You rolled " + str(oldroll) + " and " + str(advroll))
+        else:
+            print("You rolled " + str(result))
         if result < 10:
             failures += 1
         else:
             successes += 1
-        print(f"Failures: {failures} | Successes: {successes}")
+        print(f"Successes: {successes} | Failures: {failures}")
     if successes == 3:
         print("You are stable")
     if failures == 3:
