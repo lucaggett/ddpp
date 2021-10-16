@@ -40,7 +40,6 @@ class ddpp():  # Saves Required Data (config dicts)
 def s_roll(number, die):  # Rolls an amount of the same dice
     """
     returns an int
-
     generates a random number based on amount of sides of the die and the number of dice
     """
     total = 0
