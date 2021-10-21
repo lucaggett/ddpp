@@ -1,6 +1,7 @@
 import random
 import re
 import timeit
+from statistics import median
 from typing import Dict, Any
 import pprint
 
@@ -164,26 +165,31 @@ def initiative_tracker():
     for i in range(0, int(number)):
         name = input("enter your entities name")
         speed = input("enter the initiative of your character")
+        if speed == "roll":
+            modifier = input("Enter your creature's initiative modifier")
+            roll_from_string()
         initiative.update({name: speed})
     print("beginning initiative")
     i = 0
     # noinspection PyTypeChecker
-    initiative = dict(sorted(initiative.items(), key=lambda item: item[1]))
-    initiative_temp = initiative
+    initiative = dict(sorted(initiative.items(), key=lambda item: item[1], reverse=True))
+    initiative_temp.update(initiative)
     while active:
-        if initiative_temp is not {}:
-            initative = initiative_temp
+        initiative.update(initiative_temp)
+        initiative = dict(sorted(initiative.items(), key=lambda item: item[1], reverse=True))
         for entity in initiative:
             print("Entity:", entity, "| Initiative:", initiative.get(entity))
-            x = input("possible commands: add, remove, print, exit (press enter for next creature)")
+            x = input()
+            if x == "help":
+                print("possible commands: add, remove, print, exit (press enter for next creature)")
             if x == "add":
-                name = input("enter the name of your creature")
-                speed = input("enter the initiative of your creature")
+                name = input("enter the name of your creature: ")
+                speed = input("enter the initiative of your creature: ")
                 initiative_temp.update({name: speed})
                 # noinspection PyTypeChecker
-                initiative_temp = dict(sorted(initiative_temp.items(), key=lambda item: item[1]))
+                initiative_temp = dict(sorted(initiative_temp.items(), key=lambda item: item[1], reverse=True))
             if x == "remove":
-                toRemove = input("enter the name of the creature you want to remove")
+                toRemove = input("enter the name of the creature you want to remove: ")
                 print(toRemove)
                 pprint.pprint(initiative_temp, width=1)
                 if initiative_temp.pop(toRemove, -100) == -100:
@@ -223,3 +229,14 @@ def death_save():
         print("You are stable")
     if failures == 3:
         print("You are dead")
+
+def tester():
+    x = ()
+    list = []
+    for i in range(1,100):
+        x = mult_roll("1d100")
+        list.append(int(x[0]))
+    print(median(list))
+
+
+
