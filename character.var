@@ -1,14 +1,2 @@
-Strength -1
-Dexterity +3
-Constitution +9
-Intelligence +5
-Wisdom +2
-Charisma +10
-Acrobatic +3
-Arcana +9
-Deception +10
-Insight +6
-Stealth +7
-Persuasion +6
-Initiative +2
-PRO +3
+# Variable creation rules: the ordering of the variables is important:
+# Syntax for weapons:

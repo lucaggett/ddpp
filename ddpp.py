@@ -6,40 +6,6 @@ from typing import Dict, Any
 import pprint
 
 
-class ddpp():  # Saves Required Data (config dicts)
-    def __init__(self):
-        self.config = {}
-        self.i = 0
-        self.variables = {}
-
-    def importddpp(self):
-        '''
-        imports the config.ddpp file as a the config dictionary,
-        as well as the character.var and custom.var as a dictionary of variables.
-        '''
-        with open("config.ddpp") as config:
-            for line in config:
-                line = line.replace("\n", "")
-                line_tok = line.split(" ")
-                localdict = {line_tok[0]: line_tok[1:len(line_tok)]}
-                self.config.update(localdict)
-                self.i += 1
-
-        with open("character.var") as character:
-            for stat in character:
-                stat = stat.replace("\n", "")
-                stat = stat.split(" ")
-                localstat = {stat[0]: stat[1]}
-                self.variables.update(localstat)
-
-        with open("custom.var") as custom:
-            for variable in custom:
-                var = var.replace("\n", "")
-                var = var.split(" ")
-                localvar = {var[0]: var[1]}
-                self.variables.update(localvar)
-
-
 def s_roll(number, die):  # Rolls an amount of the same dice
     """
     returns an int
@@ -230,13 +196,11 @@ def death_save():
     if failures == 3:
         print("You are dead")
 
+
 def tester():
     x = ()
     list = []
-    for i in range(1,100):
+    for i in range(1, 100):
         x = mult_roll("1d100")
         list.append(int(x[0]))
     print(median(list))
-
-
-
