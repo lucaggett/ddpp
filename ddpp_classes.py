@@ -1,28 +1,62 @@
 import ddpp
+import sys
 
-
-class config():  # Saves Required Data (config dicts)
+class config():
+    """
+    the config function, for creating a config object which holds the configuration data
+    for ddpp.py, as well as the variables defined in custom.var in useable objects.
+    """
     def __init__(self):
         self.configFile = {}
         self.variables = {}
 
     def import_config(self):
-
+        """
+        Imports the config file and returns the imported data.
+        """
         with open("config/config.ddpp") as config:
             for line in config:
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
                 localdict = {line_tok[0]: line_tok[1:len(line_tok)]}
                 self.configFile.update(localdict)
-        with open("config/custom.var") as custom:
+        return self.configFile
+
+
+    def import_variables(self):
+        """
+        Imports the variables file, and then returns the imported data
+        """
+        with open("config/variables.ddpp") as custom:
             for variable in custom:
                 var = var.replace("\n", "")
                 var = var.split(" ")
                 localvar = {var[0]: var[1]}
                 self.variables.update(localvar)
+        return self.variables
+
+
+    def print_config(self):
+        """
+        prints the currently imported configuration data
+        """
+        print(self.configFile)
+        print(self.variables)
+
+    def export_config(self):
+        with open("config.ddpp", "w") as file:
+            for item in self.configFile:
+                file.write(f'{item} {self.configFile[item]}')
 
 
 class weapon():
+    """
+    A class representing a weapon 5e, contains fields
+    name: str
+    attack: string (format: XdY)
+    damage: string (format: XdY)
+    crit_range: list[int]
+    """
     def __init__(self, name, attack, damage, crit_range):
         self.name = name
         self.attack = attack
@@ -118,6 +152,9 @@ class character():  # a 5e character, can be imported from file
                     print("Error: Invalid Stat")
 
     def export_character(self):
+        """
+        writes the character file from the object to the file system.
+        """
         stats = vars(self)
         with open(f"text/{self.Name}.txt", "w") as file:
             for stat in stats:

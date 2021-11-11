@@ -88,11 +88,17 @@ def roll_from_string(inputt, var):  # Rolls Roll defined in String
     return mult_roll(replace_variables(inputs, var))
 
 
-def s_avg(number, die):  # Returns the average value of an amoutn of the same die
+def s_avg(number, die):
+    """
+    Returns the average value of an amount of the same die
+    """
     return number * ((1 + die) / 2)
 
 
-def mult_avg(instructions):  # Returns the average of an arbitrary roll
+def mult_avg(instructions):
+    """
+    Returns the average of an arbitrary roll
+    """
     total = 0
     for instruction in instructions:
         if instruction.find("+") >= 0:
@@ -111,15 +117,26 @@ def mult_avg(instructions):  # Returns the average of an arbitrary roll
 
 
 def avg_from_list(name, dict, var):
+    """
+    Returns the average of a list of rolls.
+    Supports variables and raw addition
+    """
     return mult_avg(replace_variables(dict.get(name), var))
 
 
 def avg_from_string(input, var):
+    """
+    returns the average of a string of rolls
+    supports variables and raw addition
+    """
     inputs = input.split(" ")
     return mult_avg(replace_variables(inputs, var))
 
 
-def random_from_file(filepaths):  # Picks entry in rolling table
+def random_from_file(filepaths):
+    """
+    picks a random value from each of a list of files, then returns a string made up of each of the choices.
+    """
     filepaths = filepaths.split(" ")
     choices = []
     for file in filepaths:
@@ -130,6 +147,9 @@ def random_from_file(filepaths):  # Picks entry in rolling table
 
 
 def initiative_tracker():
+    """
+    Starts an initiative tracker, initialised as an empty combat.
+    """
     initiative_temp = {}
     active = True
     initiative = {}
