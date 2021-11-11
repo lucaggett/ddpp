@@ -2,11 +2,18 @@ import unittest
 import ddpp
 import ddpp_classes
 
+"""
+Unit tests for the ddpp module.
+"""
 
 class dpppTest(unittest.TestCase):
-    # unit tests for ddpp.py
+    """
+    Test the dppp module
+    """
     def test_s_roll(self):
-        # test for s_roll
+        """
+        test for s_roll
+        """
         self.assertEqual(ddpp.s_roll(0, 0), 0)
         test_list = []
         for i in range(1, 100000):
@@ -24,7 +31,9 @@ class dpppTest(unittest.TestCase):
         print("s_roll deviation from norm: " + str(deviation))
 
     def test_mult_roll(self):
-        # test for mult_roll
+        """
+        test for mult_roll
+        """
         self.assertIsInstance(ddpp.mult_roll(["1d20", "+8"]), tuple)
         self.assertIsInstance(ddpp.mult_roll(["1d20, +8, -9"]), tuple)
 
@@ -33,8 +42,6 @@ class dpppTest(unittest.TestCase):
         # test for mult_avg
         self.assertTrue(ddpp.mult_avg(["1d20", "+8"]) == 18.5)
         self.assertTrue(ddpp.mult_avg(["1d20", "+8", "-9"]) == 9.5)
-        self.assertTrue(ddpp.mult_avg(["1d1"]) == 1)
-        self.assertTrue(ddpp.mult_avg(["1d1", "1d1"]) == 2)
 
 
     def test_roll_from_list(self):
@@ -48,9 +55,13 @@ class dpppTest(unittest.TestCase):
 
 
 class classes_test(unittest.TestCase):
-    # unit tests for ddpp_classes.py
+    """
+    unit tests for ddpp_classes.py
+    """
     def test_character(self):
-        # test for character()
+        """
+        test for the character class
+        """
         test_char = ddpp_classes.character()
         test_char.strength = 10
         test_char.dexterity = 10

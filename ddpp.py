@@ -1,6 +1,7 @@
 """
 the main file for the ddpp.py library.
 """
+
 # *-* coding: utf-8 *-*
 # pylint: disable=line-too-long
 
@@ -131,13 +132,16 @@ def avg_from_list(name, config):
     return mult_avg(replace_variables(config.configFile.get(name), config.variables))
 
 
-def avg_from_string(inputs, config):
+
+def avg_from_string(data, var):
     """
     returns the average of a string of rolls
     supports variables and raw addition
     """
-    string_list = inputs.split(" ")
-    return mult_avg(replace_variables(string_list, config.variables))
+
+    inputs = data.split(" ")
+    return mult_avg(replace_variables(inputs, var))
+
 
 
 def random_from_file(filepaths):
@@ -148,8 +152,8 @@ def random_from_file(filepaths):
     filepaths = filepaths.split(" ")
     choices = []
     for file in filepaths:
-        with open(file, "r") as f:
-            choices.append(re.sub(r"(\n|\W)", "", random.choice(f.readlines())))
+        with open(file, "r") as contentfile:
+            choices.append(re.sub(r"(\n|\W)", "", random.choice(contentfile.readlines())))
     return " ".join(choices)
 
 
@@ -169,7 +173,6 @@ def initiative_tracker():
             speed = s_roll(1, 20)+int(modifier)
         initiative.update({name: speed})
     print("beginning initiative")
-    i = 0
     # noinspection PyTypeChecker
     initiative = dict(sorted(initiative.items(), key=lambda item: item[1], reverse=True))
     initiative_temp.update(initiative)
@@ -179,26 +182,28 @@ def initiative_tracker():
         initiative = dict(sorted(initiative.items(), key=lambda item: item[1], reverse=True))
         for entity in initiative:
             print("Entity:", entity, "| Initiative:", initiative.get(entity))
-            x = input()
-            if x == "help":
+            user_input = input()
+            if user_input == "help":
                 print("possible commands: add, remove, print, exit (press enter for next creature)")
-            if x == "add":
+            if user_input == "add":
                 name = input("enter the Name of your creature: ")
                 speed = input("enter the initiative of your creature: ")
                 initiative_temp.update({name: speed})
                 # noinspection PyTypeChecker
-                initiative_temp = dict(sorted(initiative_temp.items(), key=lambda item: item[1], reverse=True))
-            if x == "remove":
-                toRemove = input("enter the Name of the creature you want to remove: ")
-                print(toRemove)
+                initiative_temp = dict(sorted(initiative_temp.items(),
+                                              key=lambda item: item[1],
+                                              reverse=True))
+            if user_input == "remove":
+                to_remove = input("enter the Name of the creature you want to remove: ")
+                print(to_remove)
                 pprint.pprint(initiative_temp, width=1)
-                if initiative_temp.pop(toRemove, -100) == -100:
+                if initiative_temp.pop(to_remove, -100) == -100:
                     print("entity not found")
                 else:
-                    print(f"{toRemove} will be removed at the start of the initiative")
-            if x == "print":
+                    print(f"{to_remove} will be removed at the start of the initiative")
+            if user_input == "print":
                 pprint.pprint(initiative, width=1)
-            if x == "exit":
+            if user_input == "exit":
                 active = False
 
 

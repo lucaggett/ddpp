@@ -1,4 +1,8 @@
 import ddpp
+"""
+The Module containing the classes for ddpp.py, 
+creating objects for characters and objects
+"""
 
 class config():
     """
@@ -44,7 +48,7 @@ class config():
 
     def export_config(self):
         with open("config.ddpp", "w") as file:
-            for item in self.configFile:
+            for item in self.configFile.items():
                 file.write(f'{item} {self.configFile[item]}')
 
 
@@ -65,7 +69,7 @@ class weapon():
             fixed_crit_range[fixed_crit_range.index(item)] = int(item)
         self.crit_range = fixed_crit_range
 
-    def attack(self):
+    def attack_roll(self):
         """
         rolls an attack using the weapon, returns all results and rolls
         :return:
@@ -176,8 +180,10 @@ class character():  # a 5e character, can be imported from file
         self.initiative = int(input("Enter Initiative: "))
         self.speed = int(input("Enter Speed: "))
         self.AC = int(input("Enter AC: "))
-        self.weapon = weapon(input("Enter Weapon Name: "), input("Enter Weapon Attack: "),
-                             input("Enter Weapon Damage: "), input("Enter Weapon Crit Range: ").split(","))
+        self.weapon = weapon(input("Enter Weapon Name: "),
+                             input("Enter Weapon Attack: "),
+                             input("Enter Weapon Damage: "),
+                             input("Enter Weapon Crit Range: ").split(","))
 
     def attack(self):
         """
