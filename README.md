@@ -1,6 +1,4 @@
-# DnD-, A frontend for ddpp.py
 
-DnD- was created after the creation of ddpp, to provide an interface for the functions created in the ddpp library.
 
 [![Pylint](https://github.com/CustomRoses/DnD-/actions/workflows/pylint.yml/badge.svg)](https://github.com/CustomRoses/DnD-/actions/workflows/pylint.yml) [![Tests](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml/badge.svg)](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml)
 
