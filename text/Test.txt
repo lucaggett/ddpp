@@ -10,4 +10,4 @@ proficiency 0
 initiative 10
 speed 10
 AC 10
-weapon <ddpp_classes.weapon object at 0x7f2870e7beb0>
+weapon test 1d10 1d20 19 20

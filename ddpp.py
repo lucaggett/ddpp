@@ -1,7 +1,9 @@
 """
 the main file for the ddpp.py library.
 """
-# -*- coding: UTF-8 -*-
+
+# *-* coding: utf-8 *-*
+# pylint: disable=line-too-long
 
 import random
 import re
