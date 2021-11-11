@@ -1,7 +1,7 @@
 import ddpp
+import ddpp_classes
 
-instance = ddpp.ddpp()
-ddpp.ddpp.importddpp(instance)
+instance = ddpp_classes.config()
 ddpp.tester()
 print("Roll from dict: " + str(ddpp.roll_from_list("test", instance.config, instance.variables)[0]))
 print("Roll fromString: " + str(ddpp.roll_from_string("1d12 +2", instance.variables)))

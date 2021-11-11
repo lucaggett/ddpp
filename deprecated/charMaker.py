@@ -1,10 +1,10 @@
 def varMaker(variable):
-    with open("character.var", "a") as file:
+    with open("config/character.var", "a") as file:
         file.write(variable)
 
 
 def proMaker(proficiency):
-    with open("proficiencies.var", "a") as file:
+    with open("config/proficiencies.var", "a") as file:
         file.write(proficiency)
 
 
@@ -14,7 +14,7 @@ print("Welcome to the Character Maker!")
 for stat in stats:
     x = input(f"Please enter your {stat} modifier! :")
     varMaker(f"{stat} {x}\n")
-x = input("Please enter your Proficiency Bonus")
+x = input("Please enter your Proficiency_bonus Bonus")
 varMaker(f"PRO {x}")
 x = input("please enter your proficiencies, seperated by spaces : ")
 x = x.split(" ")
