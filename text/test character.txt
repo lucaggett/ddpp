@@ -1,0 +1,13 @@
+name test character
+Strength 1
+Dexterity 1
+Constitution 1
+Intelligence 1
+Wisdom 1
+Charisma 1
+Hitpoints 1
+Proficiency_bonus 1
+Initiative 1
+Speed 1
+AC 1
+Weapon hi 1d10 1d12 ['19', '20']
