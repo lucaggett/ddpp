@@ -69,7 +69,7 @@ class weapon():
             fixed_crit_range[fixed_crit_range.index(item)] = int(item)
         self.crit_range = fixed_crit_range
 
-    def attack(self):
+    def attack_roll(self):
         """
         rolls an attack using the weapon, returns all results and rolls
         :return:
