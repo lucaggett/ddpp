@@ -59,8 +59,8 @@ class weapon():
 
 class character():  # a 5e character, can be imported from file
     """
-    returns a character object, with most of the stats from a 5e character sheet. Weopons are created using the weapon
-    class.
+    returns a character object, with most of the stats from a 5e character sheet.
+    Weopons are created using the weapon class.
     """
 
     def __init__(self):

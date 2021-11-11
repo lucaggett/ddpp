@@ -1,8 +1,10 @@
+"""
+the main file for the ddpp.py library.
+"""
+
+
 import random
 import re
-import timeit
-from statistics import median
-from typing import Dict, Any
 import pprint
 
 
@@ -31,11 +33,11 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
     rolls = ""  # Justification
     for instruction in instructions:
         if instruction.find("+") >= 0:  # Positive Modifier
-            numbers = re.sub("\D", "", instruction)
+            numbers = re.sub(r"\D", "", instruction)
             total += int(numbers)
             rolls += str(numbers) + " + "
         elif instruction.find("-") >= 0:  # Negative Modifier
-            numbers = re.sub("\D", "", instruction)
+            numbers = re.sub(r"\D", "", instruction)
             total -= int(numbers)
             rolls += str(numbers) + " + "
         elif instruction.find("d") > 0:  # Dice Roll
@@ -48,8 +50,10 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
     return total, rolls[:-3]
 
 
-def replace_variables(instructions, variables):  # Replaces variables in instructions by concrete values
+def replace_variables(instructions, variables):
     """
+    Replaces variables in instructions by concrete values
+
     returns sanitized input, an instruction set which mult_roll can accept
 
     replaces variables with numbers parsed from a .config file and recreates the output
@@ -61,11 +65,11 @@ def replace_variables(instructions, variables):  # Replaces variables in instruc
         if instruction.find("[") >= 0:  # If is variable
             if instruction.find("-") >= 0:  # If instruction is subtractive
                 instruction_positive = False
-            variable_name = re.sub("[^A-Za-z]", "", instruction)
+            variable_name = re.sub(r"[^A-Za-z]", "", instruction)
             variable = str(variables.get(variable_name))
             if variable.find("-"):  # If value of variable is negative
                 variable_positive = False
-            variable = re.sub("\D", "", variable)
+            variable = re.sub(r"\D", "", variable)
             if variable_positive == instruction_positive:  # If ++ or -- (thus + in total)
                 sanitized.append("+" + str(variable))
             else:  # If +- or -+ (thus - in total)
@@ -92,10 +96,10 @@ def mult_avg(instructions):  # Returns the average of an arbitrary roll
     total = 0
     for instruction in instructions:
         if instruction.find("+") >= 0:
-            numbers = re.sub("\D", "", instruction)
+            numbers = re.sub(r"\D", "", instruction)
             total += int(numbers)
         elif instruction.find("-") >= 0:
-            numbers = re.sub("\D", "", instruction)
+            numbers = re.sub(r"\D", "", instruction)
             total -= int(numbers)
         elif instruction.find("d") > 0:
             args = instruction.split("d")
@@ -120,7 +124,7 @@ def random_from_file(filepaths):  # Picks entry in rolling table
     choices = []
     for file in filepaths:
         picked = random.choice(open(file).readlines())
-        picked = re.sub("(\n|\W)", "", picked)
+        picked = re.sub(r"(\n|\W)", "", picked)
         choices.append(picked)
     return " ".join(choices)
 
@@ -197,5 +201,3 @@ def death_save():
         print("You are stable")
     if failures == 3:
         print("You are dead")
-
-
