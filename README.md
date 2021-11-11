@@ -1,6 +1,6 @@
 
 
-[![Pylint](https://github.com/CustomRoses/DnD-/actions/workflows/pylint.yml/badge.svg)](https://github.com/CustomRoses/DnD-/actions/workflows/pylint.yml) [![Tests](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml/badge.svg)](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml)
+[![Pylint](https://github.com/CustomRoses/DnD-/actions/workflows/pylint.yml/badge.svg)](https://github.com/CustomRoses/DnD-/actions/workflows/pylint.yml) [![Tests](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml/badge.svg?branch=main)](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml)
 
 
 # ddpp - A library of D&D functions for DMing and Playing
