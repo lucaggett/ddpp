@@ -1,5 +1,5 @@
 def varMaker(variable):
-    with open("config/character.var", "a") as file:
+    with open("../config/character.var", "a") as file:
         file.write(variable)
 
 

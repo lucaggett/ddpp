@@ -13,7 +13,7 @@ def s_roll(number, die):  # Rolls an amount of the same dice
     """
     total = 0
     for i in range(0, number):
-        roll = random.randrange(1, die, 1)
+        roll = random.randrange(1, die)+1
         total += roll
     return total
 
@@ -23,7 +23,10 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
     returns 2 variables: total (an integer) and rolls (a string)
 
     returns a number and a string, based on rolls and modifiers parsed from instructions
+
+    instructions may either be a string or a list
     """
+
     total = 0  # Running total
     rolls = ""  # Justification
     for instruction in instructions:
@@ -49,7 +52,7 @@ def replace_variables(instructions, variables):  # Replaces variables in instruc
     """
     returns sanitized input, an instruction set which mult_roll can accept
 
-    replaces variables with numbers parsed from a .var file and recreates the output
+    replaces variables with numbers parsed from a .config file and recreates the output
     """
     sanitized = []
     for instruction in instructions:
@@ -99,8 +102,7 @@ def mult_avg(instructions):  # Returns the average of an arbitrary roll
             result = s_avg(int(args[0]), int(args[1]))
             total += result
         else:
-            pass
-            # print("invalid")
+            print("invalid")
     return total
 
 
@@ -129,7 +131,7 @@ def initiative_tracker():
     initiative = {}
     number = input("enter the number of entities in the initiative: ")
     for i in range(0, int(number)):
-        name = input("enter your entities name")
+        name = input("enter your entities Name")
         speed = input("enter the initiative of your character")
         if speed == "roll":
             modifier = input("Enter your creature's initiative modifier")
@@ -149,13 +151,13 @@ def initiative_tracker():
             if x == "help":
                 print("possible commands: add, remove, print, exit (press enter for next creature)")
             if x == "add":
-                name = input("enter the name of your creature: ")
+                name = input("enter the Name of your creature: ")
                 speed = input("enter the initiative of your creature: ")
                 initiative_temp.update({name: speed})
                 # noinspection PyTypeChecker
                 initiative_temp = dict(sorted(initiative_temp.items(), key=lambda item: item[1], reverse=True))
             if x == "remove":
-                toRemove = input("enter the name of the creature you want to remove: ")
+                toRemove = input("enter the Name of the creature you want to remove: ")
                 print(toRemove)
                 pprint.pprint(initiative_temp, width=1)
                 if initiative_temp.pop(toRemove, -100) == -100:
@@ -197,10 +199,3 @@ def death_save():
         print("You are dead")
 
 
-def tester():
-    x = ()
-    list = []
-    for i in range(1, 100):
-        x = mult_roll("1d100")
-        list.append(int(x[0]))
-    print(median(list))
