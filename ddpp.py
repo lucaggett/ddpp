@@ -14,7 +14,7 @@ def s_roll(number, die):  # Rolls an amount of the same dice
     generates a random number based on amount of sides of the die and the number of dice
     """
     total = 0
-    for i in range(0, number):
+    for _ in range(number):
         roll = random.randrange(1, die)+1
         total += roll
     return total
@@ -79,13 +79,19 @@ def replace_variables(instructions, variables):
     return sanitized
 
 
-def roll_from_list(name, dict, var):  # Rolls a roll defined in the config
-    return mult_roll(replace_variables(dict.get(name), var))
+def roll_from_list(name, config):
+    """
+    Rolls predefined roll from variables.ddpp or config.ddpp
+    """
+    return mult_roll(replace_variables(dict.get(name), config.variables))
 
 
-def roll_from_string(inputt, var):  # Rolls Roll defined in String
+def roll_from_string(inputt, config):
+    """
+    rolls from any string, replacing present variables if they are present.
+    """
     inputs = inputt.split(" ")
-    return mult_roll(replace_variables(inputs, var))
+    return mult_roll(replace_variables(inputs, config.variables))
 
 
 def s_avg(number, die):
@@ -135,14 +141,14 @@ def avg_from_string(input, var):
 
 def random_from_file(filepaths):
     """
-    picks a random value from each of a list of files, then returns a string made up of each of the choices.
+    picks a random value from each of a list of files,
+    then returns a string made up of each of the choices.
     """
     filepaths = filepaths.split(" ")
     choices = []
     for file in filepaths:
-        picked = random.choice(open(file).readlines())
-        picked = re.sub(r"(\n|\W)", "", picked)
-        choices.append(picked)
+        with open(file, "r") as f:
+            choices.append(re.sub(r"(\n|\W)", "", random.choice(f.readlines())))
     return " ".join(choices)
 
 
