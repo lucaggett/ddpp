@@ -1,5 +1,4 @@
 import ddpp
-import sys
 
 class config():
     """
@@ -98,19 +97,19 @@ class character():  # a 5e character, can be imported from file
     """
 
     def __init__(self):
-        self.Name = ""
-        self.Strength = 0
-        self.Dexterity = 0
-        self.Constitution = 0
-        self.Intelligence = 0
-        self.Wisdom = 0
-        self.Charisma = 0
-        self.Hitpoints = 0
-        self.Proficiency_bonus = 0
-        self.Initiative = 0
-        self.Speed = 0
+        self.name = ""
+        self.strength = 0
+        self.dexterity = 0
+        self.constitution = 0
+        self.intelligence = 0
+        self.wisdom = 0
+        self.charisma = 0
+        self.HP = 0
+        self.proficiency = 0
+        self.initiative = 0
+        self.speed = 0
         self.AC = 0
-        self.Weapon = weapon("If you see this something went wrong", "1d100", "1d100", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        self.weapon = weapon("If you see this something went wrong", "1d100", "1d100", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
     def import_char(self, filepath):
         """
@@ -121,33 +120,33 @@ class character():  # a 5e character, can be imported from file
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
                 if line_tok[0] == "Strength":
-                    self.Strength = int(line_tok[1])
+                    self.strength = int(line_tok[1])
                 elif line_tok[0] == "Name":
-                    self.Name = line_tok[1]
+                    self.name = line_tok[1]
                 elif line_tok[0] == "Dexterity":
-                    self.Dexterity = int(line_tok[1])
+                    self.dexterity = int(line_tok[1])
                 elif line_tok[0] == "Constitution":
-                    self.Constitution = int(line_tok[1])
+                    self.constitution = int(line_tok[1])
                 elif line_tok[0] == "Intelligence":
-                    self.Intelligence = int(line_tok[1])
+                    self.intelligence = int(line_tok[1])
                 elif line_tok[0] == "Wisdom":
-                    self.Wisdom = int(line_tok[1])
+                    self.wisdom = int(line_tok[1])
                 elif line_tok[0] == "Charisma":
-                    self.Charisma = int(line_tok[1])
+                    self.charisma = int(line_tok[1])
                 elif line_tok[0] == "Hitpoints":
-                    self.Hitpoints = int(line_tok[1])
+                    self.HP = int(line_tok[1])
                 elif line_tok[0] == "Proficiency_bonus":
-                    self.Proficiency_bonus = int(line_tok[1])
+                    self.proficiency = int(line_tok[1])
                 elif line_tok[0] == "Initiative":
-                    self.Initiative = int(line_tok[1])
+                    self.initiative = int(line_tok[1])
                 elif line_tok[0] == "Speed":
-                    self.Speed = int(line_tok[1])
+                    self.speed = int(line_tok[1])
                 elif line_tok[0] == "AC":
                     self.AC = int(line_tok[1])
                 elif line_tok[0] == "Shield":
                     self.Shield = int(line_tok[1])
                 elif line_tok[0] == "Weapon":
-                    self.Weapon = weapon(line_tok[1], line_tok[2], line_tok[3], line_tok[4:])
+                    self.weapon = weapon(line_tok[1], line_tok[2], line_tok[3], line_tok[4:])
                 else:
                     print("Error: Invalid Stat")
 
@@ -156,10 +155,10 @@ class character():  # a 5e character, can be imported from file
         writes the character file from the object to the file system.
         """
         stats = vars(self)
-        with open(f"text/{self.Name}.txt", "w") as file:
+        with open(f"text/{self.name}.txt", "w") as file:
             for stat in stats:
                 if stat == "Weapon":
-                    file.write(f"Weapon {self.Weapon.export()}")
+                    file.write(f"Weapon {self.weapon.export()}")
                 else:
                     file.write(f"{stat} {stats[stat]}\n")
 
@@ -167,23 +166,23 @@ class character():  # a 5e character, can be imported from file
         """
         creates a character object.
         """
-        self.Name = input("Enter Character Name: ")
-        self.Strength = int(input("Enter Strength: "))
-        self.Dexterity = int(input("Enter Dexterity: "))
-        self.Constitution = int(input("Enter Constitution: "))
-        self.Intelligence = int(input("Enter Intelligence: "))
-        self.Wisdom = int(input("Enter Wisdom: "))
-        self.Charisma = int(input("Enter Charisma: "))
-        self.Hitpoints = int(input("Enter Hitpoints: "))
-        self.Proficiency_bonus = int(input("Enter Proficiency_bonus Bonus: "))
-        self.Initiative = int(input("Enter Initiative: "))
-        self.Speed = int(input("Enter Speed: "))
+        self.name = input("Enter Character Name: ")
+        self.strength = int(input("Enter Strength: "))
+        self.dexterity = int(input("Enter Dexterity: "))
+        self.constitution = int(input("Enter Constitution: "))
+        self.intelligence = int(input("Enter Intelligence: "))
+        self.wisdom = int(input("Enter Wisdom: "))
+        self.charisma = int(input("Enter Charisma: "))
+        self.HP = int(input("Enter Hitpoints: "))
+        self.proficiency = int(input("Enter Proficiency_bonus Bonus: "))
+        self.initiative = int(input("Enter Initiative: "))
+        self.speed = int(input("Enter Speed: "))
         self.AC = int(input("Enter AC: "))
-        self.Weapon = weapon(input("Enter Weapon Name: "), input("Enter Weapon Attack: "),
+        self.weapon = weapon(input("Enter Weapon Name: "), input("Enter Weapon Attack: "),
                              input("Enter Weapon Damage: "), input("Enter Weapon Crit Range: ").split(","))
 
     def attack(self):
         """
         makes an attack!
         """
-        return self.Weapon.attack()
+        return self.weapon.attack()
