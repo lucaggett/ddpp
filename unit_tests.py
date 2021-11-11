@@ -41,6 +41,10 @@ class dpppTest(unittest.TestCase):
         c = ddpp_classes.config()
         c.import_config()
 
+    def test_roll_from_string(self):
+        c = ddpp_classes.config()
+        c.import_config()
+
 
 
 class classes_test(unittest.TestCase):
