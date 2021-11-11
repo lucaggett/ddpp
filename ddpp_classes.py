@@ -119,36 +119,34 @@ class character():  # a 5e character, can be imported from file
             for line in character:
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
-                if line_tok[0] == "Strength":
+                if line_tok[0] == "strength":
                     self.strength = int(line_tok[1])
-                elif line_tok[0] == "Name":
+                elif line_tok[0] == "name":
                     self.name = line_tok[1]
-                elif line_tok[0] == "Dexterity":
+                elif line_tok[0] == "dexterity":
                     self.dexterity = int(line_tok[1])
-                elif line_tok[0] == "Constitution":
+                elif line_tok[0] == "constitution":
                     self.constitution = int(line_tok[1])
-                elif line_tok[0] == "Intelligence":
+                elif line_tok[0] == "intelligence":
                     self.intelligence = int(line_tok[1])
-                elif line_tok[0] == "Wisdom":
+                elif line_tok[0] == "wisdom":
                     self.wisdom = int(line_tok[1])
-                elif line_tok[0] == "Charisma":
+                elif line_tok[0] == "charisma":
                     self.charisma = int(line_tok[1])
-                elif line_tok[0] == "Hitpoints":
+                elif line_tok[0] == "HP":
                     self.HP = int(line_tok[1])
-                elif line_tok[0] == "Proficiency_bonus":
+                elif line_tok[0] == "proficiency":
                     self.proficiency = int(line_tok[1])
-                elif line_tok[0] == "Initiative":
+                elif line_tok[0] == "initiative":
                     self.initiative = int(line_tok[1])
-                elif line_tok[0] == "Speed":
+                elif line_tok[0] == "speed":
                     self.speed = int(line_tok[1])
                 elif line_tok[0] == "AC":
                     self.AC = int(line_tok[1])
-                elif line_tok[0] == "Shield":
-                    self.Shield = int(line_tok[1])
-                elif line_tok[0] == "Weapon":
+                elif line_tok[0] == "weapon":
                     self.weapon = weapon(line_tok[1], line_tok[2], line_tok[3], line_tok[4:])
                 else:
-                    print("Error: Invalid Stat")
+                    print("Error: Invalid Stat " + line_tok[0])
 
     def export_character(self):
         """
@@ -157,8 +155,8 @@ class character():  # a 5e character, can be imported from file
         stats = vars(self)
         with open(f"text/{self.name}.txt", "w") as file:
             for stat in stats:
-                if stat == "Weapon":
-                    file.write(f"Weapon {self.weapon.export()}")
+                if stat == "weapon":
+                    file.write(f"weapon {self.weapon.export()}")
                 else:
                     file.write(f"{stat} {stats[stat]}\n")
 

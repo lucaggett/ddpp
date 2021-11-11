@@ -31,10 +31,10 @@ class dpppTest(unittest.TestCase):
 
     def test_mult_avg(self):
         # test for mult_avg
-        self.assertTrue(ddpp.mult_avg(["1d20", "+8"]) == 19)
-        self.assertTrue(ddpp.mult_avg(["1d20, +8, -9"]) == 10)
+        self.assertTrue(ddpp.mult_avg(["1d20", "+8"]) == 18.5)
+        self.assertTrue(ddpp.mult_avg(["1d20", "+8", "-9"]) == 9.5)
         self.assertTrue(ddpp.mult_avg(["1d1"]) == 1)
-        self.assertTrue(ddpp.mult_avg(["1d1 1d1"]) == 2)
+        self.assertTrue(ddpp.mult_avg(["1d1", "1d1"]) == 2)
 
 
     def test_roll_from_list(self):
@@ -75,6 +75,7 @@ class classes_test(unittest.TestCase):
         self.assertIsInstance(test_char.weapon, ddpp_classes.weapon)
         import_test = ddpp_classes.character()
         import_test.import_char("text/Test.txt")
+        print(import_test.name)
         self.assertEqual(test_char.name, import_test.name)
         self.assertEqual(test_char.strength, import_test.strength)
         self.assertEqual(test_char.dexterity, import_test.dexterity)

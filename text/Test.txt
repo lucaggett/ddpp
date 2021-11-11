@@ -1,13 +1,13 @@
-Name Test
-Strength 10
-Dexterity 10
-Constitution 10
-Intelligence 10
-Wisdom 10
-Charisma 10
-Hitpoints 0
-Proficiency_bonus 0
-Initiative 10
-Speed 10
+name Test
+strength 10
+dexterity 10
+constitution 10
+intelligence 10
+wisdom 10
+charisma 10
+HP 0
+proficiency 0
+initiative 10
+speed 10
 AC 10
-Weapon test 1d10 1d20 19 20
+weapon test 1d10 1d20 19 20
