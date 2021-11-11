@@ -123,21 +123,21 @@ def mult_avg(instructions):
     return total
 
 
-def avg_from_list(name, dict, var):
+def avg_from_list(name, config):
     """
     Returns the average of a list of rolls.
     Supports variables and raw addition
     """
-    return mult_avg(replace_variables(dict.get(name), var))
+    return mult_avg(replace_variables(config.configFile.get(name), config.variables))
 
 
-def avg_from_string(input, var):
+def avg_from_string(inputs, config):
     """
     returns the average of a string of rolls
     supports variables and raw addition
     """
-    inputs = input.split(" ")
-    return mult_avg(replace_variables(inputs, var))
+    string_list = inputs.split(" ")
+    return mult_avg(replace_variables(string_list, config.variables))
 
 
 def random_from_file(filepaths):
