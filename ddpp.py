@@ -160,12 +160,12 @@ def initiative_tracker():
     active = True
     initiative = {}
     number = input("enter the number of entities in the initiative: ")
-    for i in range(0, int(number)):
+    for _ in range(0, int(number)):
         name = input("enter your entities Name")
         speed = input("enter the initiative of your character")
         if speed == "roll":
             modifier = input("Enter your creature's initiative modifier")
-            roll_from_string()
+            speed = s_roll(1, 20)+int(modifier)
         initiative.update({name: speed})
     print("beginning initiative")
     i = 0
@@ -174,6 +174,7 @@ def initiative_tracker():
     initiative_temp.update(initiative)
     while active:
         initiative.update(initiative_temp)
+        # noinspection PyTypeChecker
         initiative = dict(sorted(initiative.items(), key=lambda item: item[1], reverse=True))
         for entity in initiative:
             print("Entity:", entity, "| Initiative:", initiative.get(entity))
@@ -210,7 +211,7 @@ def death_save():
     while failures < 3 and successes < 3:
         input("Press Enter for your next death save")
         result = s_roll(1, 20)
-        if adv == "yes" or adv == "yup":
+        if adv in ("yes", "yup"):
             advroll = s_roll(1, 20)
             oldroll = result
             if advroll > result:

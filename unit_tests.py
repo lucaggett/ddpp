@@ -48,48 +48,48 @@ class classes_test(unittest.TestCase):
     def test_character(self):
         # test for character()
         test_char = ddpp_classes.character()
-        test_char.Strength = 10
-        test_char.Dexterity = 10
-        test_char.Constitution = 10
-        test_char.Intelligence = 10
-        test_char.Wisdom = 10
-        test_char.Charisma = 10
-        test_char.Speed = 10
-        test_char.Initiative = 10
-        test_char.Name = "Test"
+        test_char.strength = 10
+        test_char.dexterity = 10
+        test_char.constitution = 10
+        test_char.intelligence = 10
+        test_char.wisdom = 10
+        test_char.charisma = 10
+        test_char.speed = 10
+        test_char.initiative = 10
+        test_char.name = "Test"
         test_char.AC = 10
-        test_char.Weapon = ddpp_classes.weapon("test", "1d10", "1d20", [19, 20])
+        test_char.weapon = ddpp_classes.weapon("test", "1d10", "1d20", [19, 20])
         test_char.export_character()
-        self.assertIsInstance(test_char.Name, str)
-        self.assertIsInstance(test_char.Strength, int)
-        self.assertIsInstance(test_char.Dexterity, int)
-        self.assertIsInstance(test_char.Constitution, int)
-        self.assertIsInstance(test_char.Intelligence, int)
-        self.assertIsInstance(test_char.Wisdom, int)
-        self.assertIsInstance(test_char.Charisma, int)
-        self.assertIsInstance(test_char.Hitpoints, int)
+        self.assertIsInstance(test_char.name, str)
+        self.assertIsInstance(test_char.strength, int)
+        self.assertIsInstance(test_char.dexterity, int)
+        self.assertIsInstance(test_char.constitution, int)
+        self.assertIsInstance(test_char.intelligence, int)
+        self.assertIsInstance(test_char.wisdom, int)
+        self.assertIsInstance(test_char.charisma, int)
+        self.assertIsInstance(test_char.HP, int)
         self.assertIsInstance(test_char.AC, int)
-        self.assertIsInstance(test_char.Initiative, int)
-        self.assertIsInstance(test_char.Speed, int)
-        self.assertIsInstance(test_char.Proficiency_bonus, int)
-        self.assertIsInstance(test_char.Weapon, ddpp_classes.weapon)
+        self.assertIsInstance(test_char.initiative, int)
+        self.assertIsInstance(test_char.speed, int)
+        self.assertIsInstance(test_char.proficiency, int)
+        self.assertIsInstance(test_char.weapon, ddpp_classes.weapon)
         import_test = ddpp_classes.character()
         import_test.import_char("text/Test.txt")
-        self.assertEqual(test_char.Name, import_test.Name)
-        self.assertEqual(test_char.Strength, import_test.Strength)
-        self.assertEqual(test_char.Dexterity, import_test.Dexterity)
-        self.assertEqual(test_char.Constitution, import_test.Constitution)
-        self.assertEqual(test_char.Intelligence, import_test.Intelligence)
-        self.assertEqual(test_char.Wisdom, import_test.Wisdom)
-        self.assertEqual(test_char.Charisma, import_test.Charisma)
-        self.assertEqual(test_char.Hitpoints, import_test.Hitpoints)
+        self.assertEqual(test_char.name, import_test.name)
+        self.assertEqual(test_char.strength, import_test.strength)
+        self.assertEqual(test_char.dexterity, import_test.dexterity)
+        self.assertEqual(test_char.constitution, import_test.constitution)
+        self.assertEqual(test_char.intelligence, import_test.intelligence)
+        self.assertEqual(test_char.wisdom, import_test.wisdom)
+        self.assertEqual(test_char.charisma, import_test.charisma)
+        self.assertEqual(test_char.HP, import_test.HP)
         self.assertEqual(test_char.AC, import_test.AC)
-        self.assertEqual(test_char.Initiative, import_test.Initiative)
-        self.assertEqual(test_char.Speed, import_test.Speed)
-        self.assertEqual(test_char.Proficiency_bonus, import_test.Proficiency_bonus)
-        self.assertEqual(test_char.Weapon.name, import_test.Weapon.name)
-        self.assertEqual(test_char.Weapon.damage, import_test.Weapon.damage)
-        self.assertEqual(test_char.Weapon.crit_range, import_test.Weapon.crit_range)
+        self.assertEqual(test_char.initiative, import_test.initiative)
+        self.assertEqual(test_char.speed, import_test.speed)
+        self.assertEqual(test_char.proficiency, import_test.proficiency)
+        self.assertEqual(test_char.weapon.name, import_test.weapon.name)
+        self.assertEqual(test_char.weapon.damage, import_test.weapon.damage)
+        self.assertEqual(test_char.weapon.crit_range, import_test.weapon.crit_range)
 
 
 
