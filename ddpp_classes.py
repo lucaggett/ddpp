@@ -168,7 +168,7 @@ class Character():  # a 5e Character, can be imported from file
         stats = vars(self)
         with open(f"text/{self.name}.txt", "w", encoding="utf-8") as file:
             for stat in stats:
-                if stat == "Weapon":
+                if stat == "weapon":
                     file.write(f"Weapon {self.weapon.export()}")
                 else:
                     file.write(f"{stat} {stats[stat]}\n")

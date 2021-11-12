@@ -5,9 +5,9 @@ constitution 10
 intelligence 10
 wisdom 10
 charisma 10
-HP 0
+health_points 0
 proficiency 0
 initiative 10
 speed 10
-AC 10
-weapon test 1d10 1d20 19 20
+armor_class 10
+Weapon test 1d10 1d20 19 20
