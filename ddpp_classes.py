@@ -1,37 +1,42 @@
-import ddpp
+# *-* coding: utf-8 *-*
+# pylint: disable=line-too-long
+# pylint: disable=R0902
+# pylint: disable=R0912
 """
-The Module containing the classes for ddpp.py, 
+The Module containing the classes for ddpp.py,
 creating objects for characters and objects
 """
+import ddpp
 
-class config():
+
+class Config():
     """
     the config function, for creating a config object which holds the configuration data
     for ddpp.py, as well as the variables defined in custom.var in useable objects.
     """
     def __init__(self):
-        self.configFile = {}
+        self.config_file = {}
         self.variables = {}
 
     def import_config(self):
         """
         Imports the config file and returns the imported data.
         """
-        with open("config/config.ddpp") as config:
-            for line in config:
+        with open("config/config.ddpp", encoding="utf-8") as config_data:
+            for line in config_data:
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
                 localdict = {line_tok[0]: line_tok[1:len(line_tok)]}
-                self.configFile.update(localdict)
-        return self.configFile
+                self.config_file.update(localdict)
+        return self.config_file
 
 
     def import_variables(self):
         """
         Imports the variables file, and then returns the imported data
         """
-        with open("config/variables.ddpp") as custom:
-            for variable in custom:
+        with open("config/variables.ddpp", encoding="utf-8") as custom:
+            for var in custom:
                 var = var.replace("\n", "")
                 var = var.split(" ")
                 localvar = {var[0]: var[1]}
@@ -43,18 +48,22 @@ class config():
         """
         prints the currently imported configuration data
         """
-        print(self.configFile)
+        print(self.config_file)
         print(self.variables)
 
     def export_config(self):
-        with open("config.ddpp", "w") as file:
-            for item in self.configFile.items():
-                file.write(f'{item} {self.configFile[item]}')
+        """
+        exports the currently imported configuration data to a file
+        :return:
+        """
+        with open("config.ddpp", "w", encoding="utf-8") as file:
+            for item in self.config_file.items():
+                file.write(f'{item} {self.config_file[item]}')
 
 
-class weapon():
+class Weapon():
     """
-    A class representing a weapon 5e, contains fields
+    A class representing a Weapon in 5e, contains fields
     name: str
     attack: string (format: XdY)
     damage: string (format: XdY)
@@ -71,7 +80,7 @@ class weapon():
 
     def attack_roll(self):
         """
-        rolls an attack using the weapon, returns all results and rolls
+        rolls an attack using the Weapon, returns all results and rolls
         :return:
         """
         attack_roll, attack_dice = ddpp.mult_roll(self.attack)
@@ -83,7 +92,7 @@ class weapon():
 
     def export(self):
         """
-        helps export the weapon to a character.config file. Returns a string
+        helps export the Weapon to a Character.config file. Returns a string
         containing the weapons Name, attack , damage, and crit range
         :return:
         """
@@ -94,10 +103,10 @@ class weapon():
         return f"{self.name} {self.attack} {self.damage} {crit_range}"
 
 
-class character():  # a 5e character, can be imported from file
+class Character():  # a 5e Character, can be imported from file
     """
-    returns a character object, with most of the stats from a 5e character sheet.
-    Weopons are created using the weapon class.
+    returns a Character object, with most of the stats from a 5e Character sheet.
+    Weopons are created using the Weapon class.
     """
 
     def __init__(self):
@@ -108,18 +117,18 @@ class character():  # a 5e character, can be imported from file
         self.intelligence = 0
         self.wisdom = 0
         self.charisma = 0
-        self.HP = 0
+        self.health_points = 0
         self.proficiency = 0
         self.initiative = 0
         self.speed = 0
-        self.AC = 0
-        self.weapon = weapon("If you see this something went wrong", "1d100", "1d100", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        self.armor_class = 0
+        self.weapon = Weapon("If you see this something went wrong", "1d100", "1d100", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
     def import_char(self, filepath):
         """
-        imports character stats from a file.
+        imports Character stats from a file.
         """
-        with open(filepath) as character:
+        with open(filepath, encoding="utf-8") as character:
             for line in character:
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
@@ -137,36 +146,36 @@ class character():  # a 5e character, can be imported from file
                     self.wisdom = int(line_tok[1])
                 elif line_tok[0] == "charisma":
                     self.charisma = int(line_tok[1])
-                elif line_tok[0] == "HP":
-                    self.HP = int(line_tok[1])
+                elif line_tok[0] == "health_points":
+                    self.health_points = int(line_tok[1])
                 elif line_tok[0] == "proficiency":
                     self.proficiency = int(line_tok[1])
                 elif line_tok[0] == "initiative":
                     self.initiative = int(line_tok[1])
                 elif line_tok[0] == "speed":
                     self.speed = int(line_tok[1])
-                elif line_tok[0] == "AC":
-                    self.AC = int(line_tok[1])
-                elif line_tok[0] == "weapon":
-                    self.weapon = weapon(line_tok[1], line_tok[2], line_tok[3], line_tok[4:])
+                elif line_tok[0] == "armor_class":
+                    self.armor_class = int(line_tok[1])
+                elif line_tok[0] == "Weapon":
+                    self.weapon = Weapon(line_tok[1], line_tok[2], line_tok[3], line_tok[4:])
                 else:
                     print("Error: Invalid Stat " + line_tok[0])
 
     def export_character(self):
         """
-        writes the character file from the object to the file system.
+        writes the Character file from the object to the file system.
         """
         stats = vars(self)
-        with open(f"text/{self.name}.txt", "w") as file:
+        with open(f"text/{self.name}.txt", "w", encoding="utf-8") as file:
             for stat in stats:
-                if stat == "weapon":
-                    file.write(f"weapon {self.weapon.export()}")
+                if stat == "Weapon":
+                    file.write(f"Weapon {self.weapon.export()}")
                 else:
                     file.write(f"{stat} {stats[stat]}\n")
 
     def create_character(self):
         """
-        creates a character object.
+        creates a Character object.
         """
         self.name = input("Enter Character Name: ")
         self.strength = int(input("Enter Strength: "))
@@ -175,12 +184,12 @@ class character():  # a 5e character, can be imported from file
         self.intelligence = int(input("Enter Intelligence: "))
         self.wisdom = int(input("Enter Wisdom: "))
         self.charisma = int(input("Enter Charisma: "))
-        self.HP = int(input("Enter Hitpoints: "))
+        self.health_points = int(input("Enter Hitpoints: "))
         self.proficiency = int(input("Enter Proficiency_bonus Bonus: "))
         self.initiative = int(input("Enter Initiative: "))
         self.speed = int(input("Enter Speed: "))
-        self.AC = int(input("Enter AC: "))
-        self.weapon = weapon(input("Enter Weapon Name: "),
+        self.armor_class = int(input("Enter armor_class: "))
+        self.weapon = Weapon(input("Enter Weapon Name: "),
                              input("Enter Weapon Attack: "),
                              input("Enter Weapon Damage: "),
                              input("Enter Weapon Crit Range: ").split(","))

@@ -129,7 +129,7 @@ def avg_from_list(name, config):
     Returns the average of a list of rolls.
     Supports variables and raw addition
     """
-    return mult_avg(replace_variables(config.configFile.get(name), config.variables))
+    return mult_avg(replace_variables(config.config_file.get(name), config.variables))
 
 
 
@@ -152,7 +152,7 @@ def random_from_file(filepaths):
     filepaths = filepaths.split(" ")
     choices = []
     for file in filepaths:
-        with open(file, "r") as contentfile:
+        with open(file, "r", encoding="utf-8") as contentfile:
             choices.append(re.sub(r"(\n|\W)", "", random.choice(contentfile.readlines())))
     return " ".join(choices)
 
@@ -167,7 +167,7 @@ def initiative_tracker():
     number = input("enter the number of entities in the initiative: ")
     for _ in range(0, int(number)):
         name = input("enter your entities Name")
-        speed = input("enter the initiative of your character")
+        speed = input("enter the initiative of your Character")
         if speed == "roll":
             modifier = input("Enter your creature's initiative modifier")
             speed = s_roll(1, 20)+int(modifier)
