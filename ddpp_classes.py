@@ -6,10 +6,9 @@
 The Module containing the classes for ddpp.py,
 creating objects for characters and objects
 """
-from sys import exit
-import ddpp
 from os.path import exists
-
+import sys
+import ddpp
 
 class Config():
     """
@@ -36,7 +35,7 @@ class Config():
         Imports the config file and returns the imported data.
         """
         if not exists("config/config.ddpp"):
-            exit("config.ddpp does not exist, exiting")
+            sys.exit("config.ddpp does not exist, exiting")
         with open("config/config.ddpp", encoding="utf-8") as config_data:
             for line in config_data:
                 line = line.replace("\n", "")
@@ -59,7 +58,7 @@ class Config():
         Imports the variables file, and then returns the imported data
         """
         if not exists("config/variables.ddpp"):
-            exit("variables.ddpp does not exist, exiting")
+            sys.exit("variables.ddpp does not exist, exiting")
         with open("config/variables.ddpp", encoding="utf-8") as custom:
             for var in custom:
                 var = var.replace("\n", "")
