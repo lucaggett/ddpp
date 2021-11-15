@@ -253,4 +253,4 @@ class Character():  # a 5e Character, can be imported from file
         """
         makes an attack!
         """
-        return self.weapon.attack()
+        return self.weapon.attack_roll()
