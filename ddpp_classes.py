@@ -95,7 +95,6 @@ class Config():
         with open("config/variables.ddpp", "w", encoding="utf-8") as file:
             for item in self.variables:
                 file.write(f'{item} {self.variables[item]}')
-        print("exported variables to variables.ddpp")
 
     def print_config(self):
         """
@@ -112,7 +111,7 @@ class Config():
             print("config.ddpp does not exist, creating new file at " + os.path.abspath("config/config.ddpp"))
         with open("config/config.ddpp", "w", encoding="utf-8") as file:
             for item in self.config_file:
-                file.write(f'{item} {self.config_file[item]}')
+                file.write(f'{item} {self.config_file[item]}\n')
         print("exported config to config.ddpp")
 
 
@@ -125,6 +124,7 @@ class Weapon():
     damage: string (format: XdY)
     crit_range: list[int]
     """
+    
 
     def __init__(self, name, attack, damage, crit_range):
         self.name = name
