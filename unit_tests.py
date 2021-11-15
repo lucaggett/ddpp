@@ -125,5 +125,5 @@ class ClassesTest(unittest.TestCase):
         self.assertIsInstance(attack[3], str)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

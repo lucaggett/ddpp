@@ -38,10 +38,24 @@ parser.add_argument(
     action="store_true",
 )
 parser.add_argument(
-    "-s", "--stats", help="show stats, requires character file as input"
+    "-s",
+    "--stats",
+    help="show stats, requires character file as input",
+    metavar="FILEPATH",
 )
 parser.add_argument("--bear", help="generate a random bear", action="store_true")
-parser.add_argument("-v", "--verbose", help="verbose output", action="store_true")
+parser.add_argument(
+    "--hat",
+    help="generate a random hat. enter a series and a tier",
+    nargs=2,
+    metavar=("SERIES", "TIER"),
+)
+parser.add_argument(
+    "-v",
+    "--verbose",
+    help="outputs additional information about the things ddpp is doing",
+    action="store_true",
+)
 parser.add_argument(
     "--heist", help="generate a random heist, writes to heist.txt", action="store_true"
 )
@@ -58,16 +72,15 @@ if not args.no_default:
         if args.verbose:
             print("Found variables file, importing variables.ddpp")
         c.import_variables()
-
 if args.roll:
     res = ddpp.mult_roll(args.roll)
     print("You rolled:", res[0])
     print("Rolls:", res[1])
 
-if args.bear == "1":
+if args.bear:
     ddpp.generate_bear()
 
-if args.heist == "1":
+if args.heist:
     ddpp.generate_heist()
 
 if args.stats:
