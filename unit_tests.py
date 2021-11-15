@@ -9,11 +9,11 @@ import ddpp
 import ddpp_classes
 
 
-
 class DDPPTest(unittest.TestCase):
     """
     Test the dppp module
     """
+
     def test_s_roll(self):
         """
         test for s_roll
@@ -41,7 +41,6 @@ class DDPPTest(unittest.TestCase):
         self.assertIsInstance(ddpp.mult_roll(["1d20", "+8"]), tuple)
         self.assertIsInstance(ddpp.mult_roll(["1d20, +8, -9"]), tuple)
 
-
     def test_mult_avg(self):
         """
         test for mult_avg
@@ -57,10 +56,12 @@ class DDPPTest(unittest.TestCase):
         self.assertTrue(ddpp.s_avg(1, 20) == 10.5)
         self.assertTrue(ddpp.s_avg(1, 12) == 6.5)
 
+
 class ClassesTest(unittest.TestCase):
     """
     unit tests for ddpp_classes.py
     """
+
     def test_character(self):
         """
         test for the Character class

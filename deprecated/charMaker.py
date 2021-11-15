@@ -18,4 +18,3 @@ x = input("Please enter your Proficiency_bonus Bonus")
 varMaker(f"PRO {x}")
 x = input("please enter your proficiencies, seperated by spaces : ")
 x = x.split(" ")
-
