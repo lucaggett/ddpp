@@ -6,6 +6,7 @@
 The Module containing the classes for ddpp.py,
 creating objects for characters and objects
 """
+import os.path
 from os.path import exists
 import sys
 import ddpp
@@ -26,7 +27,7 @@ class Config():
         """
         alias = input("What is the name of the shortcut? ")
         command = input(
-            "Please enter your shortcut\nExamples:\n1.) 1d8 +2\n2.) 1d10 +[strength]\n3.) 1d20 +[dexterity] +[proficiency]")
+            "Please enter your shortcut\nExamples:\n1.) 1d8 +2\n2.) 1d10 +[strength]\n3.) 1d20 +[dexterity] +[proficiency]\n")
         self.config_file[alias] = command
         self.export_config()
 
@@ -90,11 +91,11 @@ class Config():
         exports the currently stored variables to a text file
         """
         if not exists("config/variables.ddpp"):
-            print("variables.ddpp does not exist, creating new file")
-        with open("variables.ddpp", "w", encoding="utf-8") as file:
-            for item in self.variables.items():
+            print("variables.ddpp does not exist, creating new file at " + os.path.abspath("config/variables.ddpp"))
+        with open("config/variables.ddpp", "w", encoding="utf-8") as file:
+            for item in self.variables:
                 file.write(f'{item} {self.variables[item]}')
-        print("exported variables to variables,ddpp")
+        print("exported variables to variables.ddpp")
 
     def print_config(self):
         """
@@ -108,10 +109,11 @@ class Config():
         exports the currently imported configuration data to a file
         """
         if not exists("config/config.ddpp"):
-            print("config.ddpp does not exist, creating new file")
-        with open("config.ddpp", "w", encoding="utf-8") as file:
-            for item in self.config_file.items():
+            print("config.ddpp does not exist, creating new file at " + os.path.abspath("config/config.ddpp"))
+        with open("config/config.ddpp", "w", encoding="utf-8") as file:
+            for item in self.config_file:
                 file.write(f'{item} {self.config_file[item]}')
+        print("exported config to config.ddpp")
 
 
 
