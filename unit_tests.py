@@ -110,8 +110,18 @@ class ClassesTest(unittest.TestCase):
         self.assertEqual(test_char.weapon.damage, import_test.weapon.damage)
         self.assertEqual(test_char.weapon.crit_range, import_test.weapon.crit_range)
 
-
-
+    def test_weapon(self):
+        """
+        tests for the Weapon class in ddpp.py, mainly for the export and attack_roll functions
+        """
+        test_weapon = ddpp_classes.Weapon("test", "1d10", "1d20", [19, 20])
+        self.assertTrue(test_weapon.export() == "test 1d10 1d20 19 20")
+        attack = test_weapon.attack_roll()
+        self.assertIsInstance(attack, tuple)
+        self.assertIsInstance(attack[0], int)
+        self.assertIsInstance(attack[1], int)
+        self.assertIsInstance(attack[2], int)
+        self.assertIsInstance(attack[3], int)
 
 
 if __name__ == '__main__':

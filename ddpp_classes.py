@@ -141,7 +141,7 @@ class Weapon():
         attack_roll, attack_dice = ddpp.mult_roll(self.attack)
         damage_roll, damage_dice = ddpp.mult_roll(self.damage)
         for number in self.crit_range:
-            if str(number) in attack_roll:
+            if int(number) == attack_roll:
                 damage_roll = damage_roll * 2
         return attack_roll, attack_dice, damage_roll, damage_dice
 
