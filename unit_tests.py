@@ -120,9 +120,9 @@ class ClassesTest(unittest.TestCase):
         attack = test_weapon.attack_roll()
         self.assertIsInstance(attack, tuple)
         self.assertIsInstance(attack[0], int)
-        self.assertIsInstance(attack[1], int)
+        self.assertIsInstance(attack[1], str)
         self.assertIsInstance(attack[2], int)
-        self.assertIsInstance(attack[3], int)
+        self.assertIsInstance(attack[3], str)
 
 
 if __name__ == '__main__':
