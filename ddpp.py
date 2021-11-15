@@ -10,6 +10,9 @@ import re
 import pprint
 
 
+
+
+
 def s_roll(number, die):  # Rolls an amount of the same dice
     """
     returns an int
@@ -83,7 +86,7 @@ def replace_variables(instructions, variables):
 
 def roll_from_list(name, config):
     """
-    Rolls predefined roll from variables.ddpp or config.ddpp
+    Rolls predefined roll from variables.ddpp and config.ddpp
     """
     return mult_roll(replace_variables(dict.get(name), config.variables))
 

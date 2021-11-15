@@ -6,22 +6,36 @@
 The Module containing the classes for ddpp.py,
 creating objects for characters and objects
 """
+from os.path import exists
+import sys
 import ddpp
-
 
 class Config():
     """
     the config function, for creating a config object which holds the configuration data
     for ddpp.py, as well as the variables defined in custom.var in useable objects.
     """
+
     def __init__(self):
         self.config_file = {}
         self.variables = {}
+
+    def create_config(self):
+        """
+        creates a new shortcut in the config file
+        """
+        alias = input("What is the name of the shortcut? ")
+        command = input(
+            "Please enter your shortcut\nExamples:\n1.) 1d8 +2\n2.) 1d10 +[strength]\n3.) 1d20 +[dexterity] +[proficiency]")
+        self.config_file[alias] = command
+        self.export_config()
 
     def import_config(self):
         """
         Imports the config file and returns the imported data.
         """
+        if not exists("config/config.ddpp"):
+            sys.exit("config.ddpp does not exist, exiting")
         with open("config/config.ddpp", encoding="utf-8") as config_data:
             for line in config_data:
                 line = line.replace("\n", "")
@@ -30,11 +44,21 @@ class Config():
                 self.config_file.update(localdict)
         return self.config_file
 
+    def create_variable(self):
+        """
+        creates a new variable in thse variable and saves it to the variables file
+        """
+        name = input("What is the name of the variable? ")
+        value = input("What is the value of the variable? ")
+        self.variables[name] = value
+        self.export_variables()
 
     def import_variables(self):
         """
         Imports the variables file, and then returns the imported data
         """
+        if not exists("config/variables.ddpp"):
+            sys.exit("variables.ddpp does not exist, exiting")
         with open("config/variables.ddpp", encoding="utf-8") as custom:
             for var in custom:
                 var = var.replace("\n", "")
@@ -43,6 +67,34 @@ class Config():
                 self.variables.update(localvar)
         return self.variables
 
+
+
+    def delete_variable(self):
+        """
+        deletes a variable from the variables file
+        """
+        name = input("What is the name of the variable? ")
+        del self.variables[name]
+        self.export_variables()
+
+    def delete_config(self):
+        """
+        deletes a config from the config file
+        """
+        alias = input("What is the name of the shortcut? ")
+        del self.config_file[alias]
+        self.export_config()
+
+    def export_variables(self):
+        """
+        exports the currently stored variables to a text file
+        """
+        if not exists("config/variables.ddpp"):
+            print("variables.ddpp does not exist, creating new file")
+        with open("variables.ddpp", "w", encoding="utf-8") as file:
+            for item in self.variables.items():
+                file.write(f'{item} {self.variables[item]}')
+        print("exported variables to variables,ddpp")
 
     def print_config(self):
         """
@@ -54,11 +106,13 @@ class Config():
     def export_config(self):
         """
         exports the currently imported configuration data to a file
-        :return:
         """
+        if not exists("config/config.ddpp"):
+            print("config.ddpp does not exist, creating new file")
         with open("config.ddpp", "w", encoding="utf-8") as file:
             for item in self.config_file.items():
                 file.write(f'{item} {self.config_file[item]}')
+
 
 
 class Weapon():
@@ -69,6 +123,7 @@ class Weapon():
     damage: string (format: XdY)
     crit_range: list[int]
     """
+
     def __init__(self, name, attack, damage, crit_range):
         self.name = name
         self.attack = attack
