@@ -33,7 +33,8 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
 
     instructions may either be a string or a list
     """
-
+    if type(instructions) is str:
+        instructions = instructions.split(" ")
     total = 0  # Running total
     rolls = ""  # Justification
     for instruction in instructions:
@@ -193,9 +194,7 @@ def initiative_tracker():
                 speed = input("enter the initiative of your creature: ")
                 initiative_temp.update({name: speed})
                 # noinspection PyTypeChecker
-                initiative_temp = dict(sorted(initiative_temp.items(),
-                                              key=lambda item: item[1],
-                                              reverse=True))
+                # initiative_temp = dict(sorted(initiative_temp.items(), key=lambda item: item[1], reverse=True))
             if user_input == "remove":
                 to_remove = input("enter the Name of the creature you want to remove: ")
                 print(to_remove)
@@ -203,7 +202,8 @@ def initiative_tracker():
                 if initiative_temp.pop(to_remove, -100) == -100:
                     print("entity not found")
                 else:
-                    print(f"{to_remove} will be removed at the start of the initiative")
+                    pass
+                    #print(f"{to_remove} will be removed at the start of the initiative")
             if user_input == "print":
                 pprint.pprint(initiative, width=1)
             if user_input == "exit":
