@@ -78,17 +78,17 @@ if args.roll:
     print("You rolled:", res[0])
     print("Rolls:", res[1])
 
-if args.bear:
+elif args.bear:
     ddpp.generate_bear()
 
-if args.heist:
+elif args.heist:
     ddpp.generate_heist()
 
-if args.stats:
+elif args.stats:
     imp = ddpp_classes.Character()
     imp.import_char(args.stats)
 
-if args.list:
+elif args.list:
     print("Shortcuts:")
     for s, m in c.config_file.items():
         print("\t", s, ":", m)
@@ -96,14 +96,14 @@ if args.list:
     for v, n in c.variables.items():
         print("\t", v, ":", n)
 
-if args.alias:
+elif args.alias:
     if args.alias in c.config_file:
         print(ddpp.mult_roll(c.config_file[args.alias]))
         res, rolls = ddpp.mult_roll(c.config_file[args.alias])
         print("result is: " + str(res))
         print("you rolled: " + str(rolls))
 
-if args.config:
+elif args.config:
     ACTIVE = True
     print("Welcome to the interactive configuration editor for ddpp!")
     print("Type 'exit' to quit.")
@@ -116,10 +116,10 @@ if args.config:
             print("Commands:")
             print("\t'exit' - quit the editor")
             print("\t'list' - list all shortcuts and variables")
-            print("\t'addvar' - create a variable")
+            print("\t'mkvar' - create a variable")
             print("\t'rmvar' - remove a variable")
-            print("\t'rmshortcut' - remove a shortcut")
-            print("\t'addshortcut' - create a shortcut")
+            print("\t'rmsc' - remove a shortcut")
+            print("\t'mksc' - create a shortcut")
         elif cmd == "list":
             print("Shortcuts:")
             for s, m in c.config_file.items():
@@ -127,13 +127,15 @@ if args.config:
             print("Variables:")
             for v, n in c.variables.items():
                 print("\t", v, ":", n)
-        elif cmd == "addvar":
+        elif cmd == "mkvar":
             c.create_variable()
         elif cmd == "rmvar":
             c.delete_variable()
-        elif cmd == "rmshortcut":
+        elif cmd == "rmsc":
             c.delete_config()
-        elif cmd == "addshortcut":
+        elif cmd == "mksc":
             c.create_config()
         else:
             print("Unknown command")
+else:
+    print("No arguments given, use -h for help.")
