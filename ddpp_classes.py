@@ -28,7 +28,7 @@ class Config:
         """
         alias = input("What is the name of the shortcut? ")
         command = input(
-            "Please enter your shortcut\nExamples:\n1.) 1d8 +2\n2.) 1d10 +[strength]\n3.) 1d20 +[dexterity] +[proficiency]\n"
+            "Please enter your shortcut\nExamples:\n1.) 1d8 +2\n2.) 1d10 +[strength]\n3.) 1d20 +[dexterity] +[proficiency]\n>> "
         )
         self.config_file[alias] = command
         self.export_config()
