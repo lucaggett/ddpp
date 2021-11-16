@@ -73,6 +73,7 @@ if not args.no_default:
             print("Found variables file, importing variables.ddpp")
         c.import_variables()
 if args.roll:
+    print(ddpp.mult_roll(args.roll))
     res = ddpp.mult_roll(args.roll)
     print("You rolled:", res[0])
     print("Rolls:", res[1])
@@ -97,6 +98,7 @@ if args.list:
 
 if args.alias:
     if args.alias in c.config_file:
+        print(ddpp.mult_roll(c.config_file[args.alias]))
         res, rolls = ddpp.mult_roll(c.config_file[args.alias])
         print("result is: " + str(res))
         print("you rolled: " + str(rolls))

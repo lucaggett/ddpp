@@ -17,10 +17,12 @@ def s_roll(number, die):  # Rolls an amount of the same dice
     generates a random number based on amount of sides of the die and the number of dice
     """
     total = 0
+    info = ""
     for _ in range(number):
         roll = random.randrange(1, die) + 1
         total += roll
-    return total
+        info += str(roll) + " + "
+    return total, info[:-3]
 
 
 def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
@@ -31,7 +33,7 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
 
     instructions may either be a string or a list
     """
-    if type(instructions) is str:
+    if type(instructions) == str:
         instructions = instructions.split(" ")
     total = 0  # Running total
     rolls = ""  # Justification
@@ -46,9 +48,9 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
             rolls += str(numbers) + " + "
         elif instruction.find("d") > 0:  # Dice Roll
             args = instruction.split("d")
-            result = s_roll(int(args[0]), int(args[1]))
+            result, info = s_roll(int(args[0]), int(args[1]))
             total += result
-            rolls += str(result) + " + "
+            rolls += info + " + "
         else:  # Invalid Input
             pass
     return total, rolls[:-3]
@@ -174,7 +176,7 @@ def initiative_tracker():
         speed = input("enter the initiative of your Character")
         if speed == "roll":
             modifier = input("Enter your creature's initiative modifier")
-            speed = s_roll(1, 20) + int(modifier)
+            speed, justify = str(s_roll(1, 20)) + modifier
         initiative.update({name: speed})
     print("beginning initiative")
     # noinspection PyTypeChecker
