@@ -3,7 +3,8 @@
 """
 Unit tests for the ddpp module.
 """
-
+import sys
+import time
 import unittest
 import ddpp
 import ddpp_classes
@@ -18,21 +19,35 @@ class DDPPTest(unittest.TestCase):
         """
         test for s_roll
         """
-        self.assertEqual(ddpp.s_roll(0, 0), 0)
+        self.assertEqual(ddpp.s_roll(0, 0)[0], 0)
         test_list = []
-        for _ in range(1, 100000):
+        print(" ", end="", flush=False)
+        start = time.time()
+        for i in range(1, 10**8):
             test_list.append(ddpp.s_roll(1, 20))
+            print(f"    {i} ", end="\r", flush=True)
+        print(f"\nfinished rolling, took {time.time()-start}")
         avgsum = 0
         avgcount = 0
-        for number in test_list:
+        distdict = {}
+        for number, _ in test_list:
             self.assertTrue(number <= 20)
             self.assertTrue(number >= 1)
             avgsum += number
             avgcount += 1
+        for number, _ in test_list:
+            if number in distdict:
+                distdict[number] += 1
+            else:
+                distdict.update({number: 0})
+        for number, count in sorted(distdict.items()):
+            print(f"{count }")
+            self.assertAlmostEqual(count, avgcount / 20, delta=(avgcount / 20)*0.01)
+            #print(f"{number} was rolled {count} times, devation={count / avgcount}")
         avg = avgsum / avgcount
         deviation = 11 - avg
-        self.assertLess(abs(deviation), 4)
-        print("s_roll deviation from norm: " + str(deviation))
+        self.assertLess(abs(deviation), 0.5)
+        print("\ns_roll deviation from norm: " + str(deviation) + "\n")
 
     def test_mult_roll(self):
         """

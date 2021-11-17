@@ -4,6 +4,7 @@ This is a command line interface for ddpp.py.
 
 import argparse
 import os
+import platform
 import sys
 import time
 
@@ -17,6 +18,14 @@ parser.add_argument(
     "--alias",
     help="use an alias, input is the name of an alias. "
     "uses aliases from config.ddpp by default, use --no-default to specify a custom file",
+)
+parser.add_argument(
+    "--character",
+    help="create or load a character, optionally takes the filepath to a character file",
+    nargs="?",
+    default=False,
+    const=True,
+    metavar="FILEPATH",
 )
 parser.add_argument(
     "--config",
@@ -73,8 +82,8 @@ if not args.no_default:
             print("Found variables file, importing variables.ddpp")
         c.import_variables()
 if args.roll:
-    print(ddpp.mult_roll(args.roll))
-    res = ddpp.mult_roll(args.roll)
+    # print(ddpp.replace_variables(args.roll, c.variables))
+    res = ddpp.mult_roll(ddpp.replace_variables(args.roll, c.variables))
     print("You rolled:", res[0])
     print("Rolls:", res[1])
 
@@ -98,14 +107,16 @@ elif args.list:
 
 elif args.alias:
     if args.alias in c.config_file:
-        print(ddpp.mult_roll(c.config_file[args.alias]))
         res, rolls = ddpp.mult_roll(c.config_file[args.alias])
         print("result is: " + str(res))
         print("you rolled: " + str(rolls))
 
 elif args.config:
     ACTIVE = True
-    print("Welcome to the interactive configuration editor for ddpp!")
+    print(
+        f"Welcome to the interactive configuration editor for ddpp!\nRunning on "
+        f"{platform.system()} {platform.release()} ({platform.architecture()[0]} {platform.machine()})"
+    )
     print("Type 'exit' to quit.")
     print("Type 'help' for help.\n")
     while ACTIVE:

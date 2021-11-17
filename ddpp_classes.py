@@ -7,6 +7,7 @@ The Module containing the classes for ddpp.py,
 creating objects for characters and objects
 """
 import os.path
+import platform
 from os.path import exists
 import sys
 import ddpp
@@ -21,6 +22,17 @@ class Config:
     def __init__(self):
         self.config_file = {}
         self.variables = {}
+        self.filepath = ""
+        print(platform.system())
+
+        if platform.system() == "windows":
+            if not os.path.exists(r"C:\Program Files\ddpp"):
+                os.makedirs(r"C:\Program Files\ddpp")
+            self.filepath = r"C:\Program Files\ddpp\config.ddpp"
+        if platform.system() == "Linux" or platform.system() == "linux":
+            if not os.path.exists(r"/usr/local/bin/ddpp"):
+                os.makedirs(r"/usr/local/bin/ddpp")
+            self.filepath = r"/usr/local/bin/ddpp/"
 
     def create_config(self):
         """
@@ -37,9 +49,11 @@ class Config:
         """
         Imports the config file and returns the imported data.
         """
-        if not exists("config/config.ddpp"):
-            sys.exit("config.ddpp does not exist, exiting")
-        with open("config/config.ddpp", encoding="utf-8") as config_data:
+        print(f"{self.filepath}config.ddpp")
+        if not exists(f"{self.filepath}config.ddpp"):
+            b = open(f"{self.filepath}config.ddpp", "x", encoding="utf-8")
+            b.close()
+        with open(f"{self.filepath}config.ddpp", encoding="utf-8") as config_data:
             for line in config_data:
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
@@ -60,8 +74,9 @@ class Config:
         """
         Imports the variables file, and then returns the imported data
         """
-        if not exists("config/variables.ddpp"):
-            sys.exit("variables.ddpp does not exist, exiting")
+        if not exists(f"{self.filepath}/variables.ddpp"):
+            b = open(f"{self.filepath}/variables.ddpp", "x", encoding="utf-8")
+            b.close()
         with open("config/variables.ddpp", encoding="utf-8") as custom:
             for var in custom:
                 var = var.replace("\n", "")
@@ -90,14 +105,14 @@ class Config:
         """
         exports the currently stored variables to a text file
         """
-        if not exists("config/variables.ddpp"):
+        if not exists(f"{self.filepath}/variables.ddpp"):
             print(
                 "variables.ddpp does not exist, creating new file at "
                 + os.path.abspath("config/variables.ddpp")
             )
-        with open("config/variables.ddpp", "w", encoding="utf-8") as file:
+        with open(f"{self.filepath}/variables.ddpp", "w", encoding="utf-8") as file:
             for item in self.variables:
-                file.write(f"{item} {self.variables[item]}")
+                file.write(f"{item} {self.variables[item]}\n")
 
     def print_config(self):
         """
@@ -110,15 +125,15 @@ class Config:
         """
         exports the currently imported configuration data to a file
         """
-        if not exists("config/config.ddpp"):
+        if not exists(f"{self.filepath}/config.ddpp"):
             print(
                 "config.ddpp does not exist, creating new file at "
-                + os.path.abspath("config/config.ddpp")
+                + self.filepath
             )
-        with open("config/config.ddpp", "w", encoding="utf-8") as file:
+        with open(f"{self.filepath}/config.ddpp", "w", encoding="utf-8") as file:
             for item in self.config_file:
                 file.write(f"{item} {self.config_file[item]}\n")
-        print("exported config to config.ddpp")
+        print(f"exported config to {self.filepath}config.ddpp")
 
 
 class Weapon:

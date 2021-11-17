@@ -19,7 +19,7 @@ def s_roll(number, die):  # Rolls an amount of the same dice
     total = 0
     info = ""
     for _ in range(number):
-        roll = random.randrange(1, die) + 1
+        roll = random.randrange(1, die+1)
         total += roll
         info += str(roll) + " + "
     return total, info[:-3]
@@ -33,11 +33,12 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
 
     instructions may either be a string or a list
     """
+    instructionx = instructions
     if type(instructions) == str:
-        instructions = instructions.split(" ")
+        instructionx = instructions.split(" ")
     total = 0  # Running total
     rolls = ""  # Justification
-    for instruction in instructions:
+    for instruction in instructionx:
         if instruction.find("+") >= 0:  # Positive Modifier
             numbers = re.sub(r"\D", "", instruction)
             total += int(numbers)
@@ -52,7 +53,7 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
             total += result
             rolls += info + " + "
         else:  # Invalid Input
-            pass
+            print("Invalid Input")
     return total, rolls[:-3]
 
 
@@ -64,8 +65,11 @@ def replace_variables(instructions, variables):
 
     replaces variables with numbers parsed from a .config file and recreates the output
     """
+    if type(instructions) == str:
+        instructions = instructions.split(" ")
     sanitized = []
     for instruction in instructions:
+        print(instruction)
         instruction_positive = True
         variable_positive = True
         if instruction.find("[") >= 0:  # If is variable
