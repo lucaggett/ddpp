@@ -25,8 +25,8 @@ class DDPPTest(unittest.TestCase):
         start = time.time()
         for i in range(1, 10**6):
             test_list.append(ddpp.s_roll(1, 20))
-            print(f"    {i} ", end="\r", flush=True)
-        print(f"\nfinished rolling, took {time.time()-start}")
+            #print(f"    {i} ", end="\r", flush=True)
+        #print(f"\nfinished rolling, took {time.time()-start}")
         avgsum = 0
         avgcount = 0
         distdict = {}
@@ -42,11 +42,11 @@ class DDPPTest(unittest.TestCase):
                 distdict.update({number: 0})
         for number, count in sorted(distdict.items()):
             #print(f"{count }")
-            self.assertAlmostEqual(count, avgcount / 20, delta=(avgcount / 20)*0.01)
+            self.assertAlmostEqual(count, avgcount / 20, delta=(avgcount / 20)*0.02)
             #print(f"{number} was rolled {count} times, devation={count / avgcount}")
         avg = avgsum / avgcount
-        deviation = 11 - avg
-        self.assertLess(abs(deviation), 0.5)
+        deviation = 10.5 - avg
+        self.assertLess(abs(deviation), 0.02)
         print("\ns_roll deviation from norm: " + str(deviation) + "\n")
 
     def test_mult_roll(self):
@@ -109,7 +109,6 @@ class ClassesTest(unittest.TestCase):
         self.assertIsInstance(test_char.weapon, ddpp_classes.Weapon)
         import_test = ddpp_classes.Character()
         import_test.import_char("text/Test.txt")
-        print(import_test.name)
         self.assertEqual(test_char.name, import_test.name)
         self.assertEqual(test_char.strength, import_test.strength)
         self.assertEqual(test_char.dexterity, import_test.dexterity)
