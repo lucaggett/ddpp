@@ -23,7 +23,7 @@ class DDPPTest(unittest.TestCase):
         test_list = []
         print(" ", end="", flush=False)
         start = time.time()
-        for i in range(1, 10**8):
+        for i in range(1, 10**6):
             test_list.append(ddpp.s_roll(1, 20))
             print(f"    {i} ", end="\r", flush=True)
         print(f"\nfinished rolling, took {time.time()-start}")
@@ -41,7 +41,7 @@ class DDPPTest(unittest.TestCase):
             else:
                 distdict.update({number: 0})
         for number, count in sorted(distdict.items()):
-            print(f"{count }")
+            #print(f"{count }")
             self.assertAlmostEqual(count, avgcount / 20, delta=(avgcount / 20)*0.01)
             #print(f"{number} was rolled {count} times, devation={count / avgcount}")
         avg = avgsum / avgcount
