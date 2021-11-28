@@ -14,4 +14,4 @@ ddpp was born out of sheer boredom, and wanting to use the functions of roll20 o
 
 ddpp currently does not require the installation of any additional packages. 
 
-Since the interface is currently under construction (see interface-dev branch), the only way to use the functions is by constructing an interface yourself. Docstrings should hopefully explain some stuff. 
+you can clone the repository, and access the ddpp functions via interface.py. use interface.py --help for information about the commands available in the interface.
