@@ -24,8 +24,7 @@ parser.add_argument(
     help="create or load a character, optionally takes the filepath to a character file",
     nargs="?",
     default=False,
-    const=True,
-    metavar="FILEPATH",
+    const=True
 )
 parser.add_argument(
     "--config",
@@ -50,14 +49,12 @@ parser.add_argument(
     "-s",
     "--stats",
     help="show stats, requires character file as input",
-    metavar="FILEPATH",
 )
 parser.add_argument("--bear", help="generate a random bear", action="store_true")
 parser.add_argument(
     "--hat",
     help="generate a random hat. enter a series and a tier",
-    nargs=2,
-    metavar=("SERIES", "TIER"),
+    nargs=2
 )
 parser.add_argument(
     "-v",

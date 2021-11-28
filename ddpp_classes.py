@@ -23,7 +23,6 @@ class Config:
         self.config_file = {}
         self.variables = {}
         self.filepath = ""
-        print(platform.system())
 
         if platform.system() == "windows":
             if not os.path.exists(r"C:\Program Files\ddpp"):
@@ -49,7 +48,6 @@ class Config:
         """
         Imports the config file and returns the imported data.
         """
-        print(f"{self.filepath}config.ddpp")
         if not exists(f"{self.filepath}config.ddpp"):
             b = open(f"{self.filepath}config.ddpp", "x", encoding="utf-8")
             b.close()
@@ -74,8 +72,8 @@ class Config:
         """
         Imports the variables file, and then returns the imported data
         """
-        if not exists(f"{self.filepath}/variables.ddpp"):
-            b = open(f"{self.filepath}/variables.ddpp", "x", encoding="utf-8")
+        if not exists(f"{self.filepath}variables.ddpp"):
+            b = open(f"{self.filepath}variables.ddpp", "x", encoding="utf-8")
             b.close()
         with open("config/variables.ddpp", encoding="utf-8") as custom:
             for var in custom:

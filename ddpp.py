@@ -69,7 +69,6 @@ def replace_variables(instructions, variables):
         instructions = instructions.split(" ")
     sanitized = []
     for instruction in instructions:
-        print(instruction)
         instruction_positive = True
         variable_positive = True
         if instruction.find("[") >= 0:  # If is variable
