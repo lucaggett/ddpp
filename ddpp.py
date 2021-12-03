@@ -33,12 +33,11 @@ def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
 
     instructions may either be a string or a list
     """
-    instructionx = instructions
     if type(instructions) == str:
-        instructionx = instructions.split(" ")
+        instructions = instructions.split(" ")
     total = 0  # Running total
     rolls = ""  # Justification
-    for instruction in instructionx:
+    for instruction in instructions:
         if instruction.find("+") >= 0:  # Positive Modifier
             numbers = re.sub(r"\D", "", instruction)
             total += int(numbers)
@@ -97,11 +96,11 @@ def roll_from_list(name, config):
     return mult_roll(replace_variables(dict.get(name), config.variables))
 
 
-def roll_from_string(inputt, config):
+def roll_from_string(string, config):
     """
     rolls from any string, replacing present variables if they are present.
     """
-    inputs = inputt.split(" ")
+    inputs = string.split(" ")
     return mult_roll(replace_variables(inputs, config.variables))
 
 

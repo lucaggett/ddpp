@@ -33,7 +33,7 @@ class Config:
                 os.makedirs(r"/usr/local/bin/ddpp")
             self.filepath = r"/usr/local/bin/ddpp/"
 
-    def create_config(self):
+    def create_config(self) -> None:
         """
         creates a new shortcut in the config file
         """
@@ -44,7 +44,7 @@ class Config:
         self.config_file[alias] = command
         self.export_config()
 
-    def import_config(self):
+    def import_config(self) -> dict:
         """
         Imports the config file and returns the imported data.
         """
@@ -59,7 +59,7 @@ class Config:
                 self.config_file.update(localdict)
         return self.config_file
 
-    def create_variable(self):
+    def create_variable(self) -> None:
         """
         creates a new variable in thse variable and saves it to the variables file
         """
@@ -68,7 +68,7 @@ class Config:
         self.variables[name] = value
         self.export_variables()
 
-    def import_variables(self):
+    def import_variables(self) -> dict:
         """
         Imports the variables file, and then returns the imported data
         """
@@ -83,7 +83,7 @@ class Config:
                 self.variables.update(localvar)
         return self.variables
 
-    def delete_variable(self):
+    def delete_variable(self) -> None:
         """
         deletes a variable from the variables file
         """
@@ -91,7 +91,7 @@ class Config:
         del self.variables[name]
         self.export_variables()
 
-    def delete_config(self):
+    def delete_config(self) -> None:
         """
         deletes a config from the config file
         """
@@ -99,7 +99,7 @@ class Config:
         del self.config_file[alias]
         self.export_config()
 
-    def export_variables(self):
+    def export_variables(self) -> None:
         """
         exports the currently stored variables to a text file
         """
@@ -112,14 +112,14 @@ class Config:
             for item in self.variables:
                 file.write(f"{item} {self.variables[item]}\n")
 
-    def print_config(self):
+    def print_config(self) -> None:
         """
         prints the currently imported configuration data
         """
         print(self.config_file)
         print(self.variables)
 
-    def export_config(self):
+    def export_config(self) -> None:
         """
         exports the currently imported configuration data to a file
         """
@@ -152,7 +152,7 @@ class Weapon:
             fixed_crit_range[fixed_crit_range.index(item)] = int(item)
         self.crit_range = fixed_crit_range
 
-    def attack_roll(self):
+    def attack_roll(self) -> int:
         """
         rolls an attack using the Weapon, returns all results and rolls
         :return:
@@ -164,7 +164,7 @@ class Weapon:
                 damage_roll = damage_roll * 2
         return attack_roll, attack_dice, damage_roll, damage_dice
 
-    def export(self):
+    def export(self) -> None:
         """
         helps export the Weapon to a Character.config file. Returns a string
         containing the weapons Name, attack , damage, and crit range
@@ -203,7 +203,7 @@ class Character:  # a 5e Character, can be imported from file
             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         )
 
-    def import_char(self, filepath):
+    def import_char(self, filepath) -> None:
         """
         imports Character stats from a file.
         """
@@ -242,7 +242,7 @@ class Character:  # a 5e Character, can be imported from file
                 else:
                     print("Error: Invalid Stat " + line_tok[0])
 
-    def export_character(self):
+    def export_character(self) -> None:
         """
         writes the Character file from the object to the file system.
         """
@@ -254,7 +254,7 @@ class Character:  # a 5e Character, can be imported from file
                 else:
                     file.write(f"{stat} {stats[stat]}\n")
 
-    def create_character(self):
+    def create_character(self) -> None:
         """
         creates a Character object.
         """
@@ -277,7 +277,7 @@ class Character:  # a 5e Character, can be imported from file
             input("Enter Weapon Crit Range: ").split(","),
         )
 
-    def attack(self):
+    def attack(self) -> int:
         """
         makes an attack!
         """
