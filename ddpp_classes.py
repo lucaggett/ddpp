@@ -152,7 +152,7 @@ class Weapon:
             fixed_crit_range[fixed_crit_range.index(item)] = int(item)
         self.crit_range = fixed_crit_range
 
-    def attack_roll(self) -> int:
+    def attack_roll(self) -> tuple:
         """
         rolls an attack using the Weapon, returns all results and rolls
         :return:
@@ -164,7 +164,7 @@ class Weapon:
                 damage_roll = damage_roll * 2
         return attack_roll, attack_dice, damage_roll, damage_dice
 
-    def export(self) -> None:
+    def export(self) -> str:
         """
         helps export the Weapon to a Character.config file. Returns a string
         containing the weapons Name, attack , damage, and crit range
@@ -196,6 +196,13 @@ class Character:  # a 5e Character, can be imported from file
         self.initiative = 0
         self.speed = 0
         self.armor_class = 0
+        self.proficiencies = []
+        self.saving_throws = []
+        self.skills = []
+        self.weapons = []
+        self.equipment = []
+        self.features = []
+        self.languages = []
         self.weapon = Weapon(
             "If you see this something went wrong",
             "1d100",
@@ -277,8 +284,10 @@ class Character:  # a 5e Character, can be imported from file
             input("Enter Weapon Crit Range: ").split(","),
         )
 
-    def attack(self) -> int:
+    def attack(self) -> tuple:
         """
         makes an attack!
         """
         return self.weapon.attack_roll()
+
+
