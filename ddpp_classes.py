@@ -10,7 +10,8 @@ import os.path
 import platform
 from os.path import exists
 import sys
-import ddpp
+from ddpp import *
+
 
 
 class Config:
@@ -55,7 +56,7 @@ class Config:
             for line in config_data:
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
-                localdict = {line_tok[0]: line_tok[1 : len(line_tok)]}
+                localdict = {line_tok[0]: line_tok[1: len(line_tok)]}
                 self.config_file.update(localdict)
         return self.config_file
 
@@ -132,7 +133,6 @@ class Config:
             for item in self.config_file:
                 file.write(f"{item} {self.config_file[item]}\n")
         print(f"exported config to {self.filepath}config.ddpp")
-
 
 class Weapon:
     """
