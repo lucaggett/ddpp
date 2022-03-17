@@ -4,27 +4,35 @@ the main file for the ddpp.py library.
 
 # *-* coding: utf-8 *-*
 # pylint: disable=line-too-long
-from ddpp_classes import *
 from random import randrange, choice
 from re import sub
 from pprint import pprint
+from os.path import abspath
+from time import sleep
+from ddpp_classes import Config
 
 
 class Instructions:
-    def __init__(self, instructions: str, Config):
+    """
+    A class holding rolling instructions, which are used to generate random dice rolls
+    """
+
+    def __init__(self, instructions: str, config=None):
+        if not config:
+            config = Config()
         self.instructions = (
-            Config.config_file[instructions]
-            if instructions in Config.config_file
+            config.config_file[instructions]
+            if instructions in config.config_file
             else instructions.split(" ")
         )
-        self.config = Config
+        self.config = config
         self.__replace_variables()
         avg = 0
         for instruction in self.instructions:
             if instruction.startswith("+"):
-                avg += int(instruction[1:] / 2)
+                avg += int(instruction[1:]) / 2
             elif instruction.startswith("-"):
-                avg += -int(instruction[1:] / 2)
+                avg += -int(instruction[1:]) / 2
             else:
                 avg += self.__s_avg(
                     int(instruction.split("d")[0]), int(instruction.split("d")[1])
@@ -32,15 +40,15 @@ class Instructions:
         self.average = avg
 
     def __str__(self):
-        return self.instructions
+        return "".join(self.instructions)
 
     def __repr__(self):
-        return self.instructions
+        return "".join(self.instructions)
 
     def __replace_variables(self):
-        for i in range(len(self.instructions)):
-            if self.instructions[i] in self.config.variables:
-                self.instructions[i] = self.config.variables[self.instructions[i]]
+        for idx, instruction in enumerate(self.instructions[:]):
+            if instruction in self.config.variables:
+                self.instructions[idx] = self.config.variables[self.instructions[idx]]
 
     def __iter__(self):
         """
@@ -55,7 +63,7 @@ class Instructions:
                 num, die = instruction.split("d")
                 yield self.s_roll(int(num), int(die))
 
-    def __add__(self, other) -> Instructions:
+    def __add__(self, other):
         """
         add two instructions together
         """
@@ -84,7 +92,7 @@ class Instructions:
     def s_roll(number: int, die: int) -> (int, str):  # Rolls an amount of the same dice
         """
         returns an int and a justification string
-        generates a random number based on amount of sides of the die and the number of dice
+        generates a number based on amount of sides of the die and the number of dice
         """
         total = 0
         info = ""
@@ -95,9 +103,9 @@ class Instructions:
         return total, info[:-3]
 
 
-def random_from_file(filepaths):
+def from_file(filepaths):
     """
-    picks a random value from each of a list of files,
+    picks a value from each of a list of files,
     then returns a string made up of each of the choices.
     """
     filepaths = filepaths.split(" ")
@@ -123,7 +131,7 @@ def initiative_tracker():
         speed = input("enter the initiative of your Character")
         if speed == "roll":
             modifier = input("Enter your creature's initiative modifier")
-            speed, justify = str(s_roll(1, 20)) + modifier
+            speed = str(Instructions.s_roll(1, 20)[0]) + modifier
         initiative.update({name: speed})
     print("beginning initiative")
     # noinspection PyTypeChecker
@@ -153,7 +161,7 @@ def initiative_tracker():
             if user_input == "remove":
                 to_remove = input("enter the Name of the creature you want to remove: ")
                 print(to_remove)
-                pprint.pprint(initiative_temp, width=1)
+                pprint(initiative_temp, width=1)
                 if initiative_temp.pop(to_remove, -100) == -100:
                     print("entity not found")
                 else:
@@ -198,7 +206,6 @@ def generate_heist():
     """
     generates a heist
     """
-    from time import sleep
     print("Booting Heist-a-Tron 3000")
     sleep(1)
     print("Loading...")
@@ -304,15 +311,15 @@ def generate_heist():
         "The prize has a hidden explosive!",
         "It was all a test set up by the head crime bear, Marcus Anetonne",
     ]
-    with open("heist.txt", "w") as f:
-        f.write("Location: " + random.choice(loc_mod) + " " + random.choice(loc) + "\n")
-        f.write("Security: " + random.choice(sec) + " and " + random.choice(sec) + "\n")
-        f.write("Prize: " + random.choice(prize) + "\n")
-        f.write("Organizer: " + random.choice(organizers) + "\n")
-        f.write("Twist: " + random.choice(twist) + "\n")
-    with open("heist.txt", "r") as f:
-        print("\n" + f.read())
-        print("\n" + "Heist has been written to " + os.path.abspath("heist.txt"))
+    with open("heist.txt", "w", encoding="utf-8") as file:
+        file.write("Location: " + choice(loc_mod) + " " + choice(loc) + "\n")
+        file.write("Security: " + choice(sec) + " and " + choice(sec) + "\n")
+        file.write("Prize: " + choice(prize) + "\n")
+        file.write("Organizer: " + choice(organizers) + "\n")
+        file.write("Twist: " + choice(twist) + "\n")
+    with open("heist.txt", "r", encoding="utf-8") as file:
+        print("\n" + file.read())
+        print("\n" + "Heist has been written to " + abspath("heist.txt"))
 
 
 def generate_bear(weakness=False):
@@ -320,7 +327,7 @@ def generate_bear(weakness=False):
     generates a bear
     """
     print("Booting Bear-a-Tron 3000")
-    time.sleep(1)
+    sleep(1)
     personalites = [
         "Shrewd",
         "Vicious",
@@ -371,11 +378,11 @@ def generate_bear(weakness=False):
     ]
     print(
         "Your bear is a "
-        + random.choice(bears)
+        + choice(bears)
         + " with a "
-        + random.choice(personalites)
+        + choice(personalites)
         + " personality."
     )
-    print("They're " + random.choice(roles) + " in this heist")
+    print("They're " + choice(roles) + " in this heist")
     if weakness:
-        print("They have a weakness: " + random.choice(weaknesses))
+        print("They have a weakness: " + choice(weaknesses))
