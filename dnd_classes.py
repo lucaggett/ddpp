@@ -1,71 +1,88 @@
-from ddpp_classes import Character
+from abc import ABC, abstractmethod
 
+class Character(ABC):  # a 5e Character, can be imported from file
+    """
+    returns a Character object, with most of the stats from a 5e Character sheet.
+    Weopons are created using the Weapon class.
+    """
 
-class Fighter(Character):
     def __init__(self):
-        super().__init__()
-        self.hit_die = 10
-        self.proficiencies.append('light armor')
-        self.proficiencies.append('medium armor')
-        self.proficiencies.append('heavy armor')
-        self.proficiencies.append('shields')
-        self.proficiencies.append('simple weapons')
-        self.proficiencies.append('martial weapons')
-        self.saving_throws.append('strength')
-        self.saving_throws.append('constitution')
-        self.skills.append('athletics')
-        self.skills.append('intimidation')
-        self.skills.append('strength')
-        self.skills.append('survival')
+        self.name = ""
+        self.stats = {
+            "strength": 0,
+            "dexterity": 0,
+            "constitution": 0,
+            "intelligence": 0,
+            "wisdom": 0,
+            "charisma": 0,
+        }
+        self.speed = 0
+        self.armor_class = 0
+        self.hp = 0
+        self.proficiency = 0
+        self.speed = 0
+        self.armor_class = 0
+        self.proficiencies = []
+        self.saving_throws = []
+        self.skills = []
+        self.weapons = []
+        self.equipment = []
+        self.features = []
+        self.languages = []
+        self.weapon = Weapon(
+            "If you see this something went wrong",
+            "1d100",
+            "1d100",
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        )
 
-    def __str__(self):
-        return 'Fighter'
+    def import_char(self, filepath) -> None:
+        """
+        imports Character stats from a file.
+        """
+        with open(filepath, encoding="utf-8") as character:
+            attrs = vars(self)
+            for line in character:
+                line = line.replace("\n", "")
+                line_tok = line.split(" ")
+                if line_tok[0] in self.stats:
+                    self.stats[line_tok[0]] = line_tok[1]
+                elif line_tok[0] in attrs:
+                    self.__setattr__(line_tok[0], line_tok[1])
 
-    def __repr__(self):
-        return 'Fighter'
+    def export_character(self) -> None:
+        """
+        writes the Character file from the object to the file system.
+        """
+        stats = vars(self)
+        with open(f"text/{self.name}.txt", "w", encoding="utf-8") as file:
+            for stat in stats:
+                if stat == "weapon":
+                    file.write(f"Weapon {self.weapon.export()}")
+                else:
+                    file.write(f"{stat} {stats[stat]}\n")
 
-    def __eq__(self, other):
-        return self.__repr__() == other.__repr__()
+    def create_character(self) -> None:
+        """
+        creates a Character object.
+        """
 
-    def __hash__(self):
-        return hash(self.__repr__())
+        self.name = input("Enter Character Name: ")
+        for stat in self.stats:
+            self.stats[stat] = input(f"Enter {stat}: ")
+        self.proficiency = int(input("Enter Proficiency_bonus Bonus: "))
+        self.speed = int(input("Enter Speed: "))
+        self.armor_class = int(input("Enter armor_class: "))
+        self.weapon = Weapon(
+            input("Enter Weapon Name: "),
+            input("Enter Weapon Attack: "),
+            input("Enter Weapon Damage: "),
+            input("Enter Weapon Crit Range: ").split(","),
+        )
 
-
-class Paladin(Character):
-    def __init__(self):
-        super().__init__()
-        self.hit_die = 10
-        self.proficiencies.append('light armor')
-        self.proficiencies.append('medium armor')
-        self.proficiencies.append('heavy armor')
-        self.proficiencies.append('shields')
-        self.proficiencies.append('simple weapons')
-        self.proficiencies.append('martial weapons')
-        self.saving_throws.append('wisdom')
-        self.saving_throws.append('charisma')
-        self.skills.append('athletics')
-        self.skills.append('insight')
-        self.skills.append('intimidation')
-        self.skills.append('medicine')
-        self.skills.append('persuasion')
-        self.skills.append('religion')
-
-
-class Ranger(Character):
-    def __init__(self):
-        super().__init__()
-        self.hit_die = 10
-        self.proficiencies.append('light armor')
-        self.proficiencies.append('medium armor')
-        self.proficiencies.append('heavy armor')
-        self.proficiencies.append('shields')
-        self.proficiencies.append('simple weapons')
-        self.proficiencies.append('martial weapons')
-        self.saving_throws.append('dexterity')
-        self.saving_throws.append('wisdom')
-        self.skills.append('athletics')
-        self.skills.append('insight')
-        self.skills.append('investigation')
-        self.skills.append('nature')
-        self.skills.append('perception')
-        self.skills.append('stealth')
+    @abstractmethod
+    def attack(self) -> int:
+        """
+        makes an attack!
+        """
+        pass
