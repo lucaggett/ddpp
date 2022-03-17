@@ -9,8 +9,6 @@ creating objects for characters and objects
 import os.path
 import platform
 from os.path import exists
-import sys
-from ddpp import *
 
 
 class Config:
@@ -49,8 +47,10 @@ class Config:
         Imports the config file and returns the imported data.
         """
         if not exists(f"{self.filepath}config.ddpp"):
-            b = open(f"{self.filepath}config.ddpp", "x", encoding="utf-8")
-            b.close()
+            print("No config file found, creating one.")
+            with open(f"{self.filepath}config.ddpp", "x", encoding="utf-8") as _:
+                pass
+
         with open(f"{self.filepath}config.ddpp", encoding="utf-8") as config_data:
             for line in config_data:
                 line = line.replace("\n", "")
@@ -73,8 +73,9 @@ class Config:
         Imports the variables file, and then returns the imported data
         """
         if not exists(f"{self.filepath}variables.ddpp"):
-            b = open(f"{self.filepath}variables.ddpp", "x", encoding="utf-8")
-            b.close()
+            raise FileNotFoundError("No variables file found")
+
+
         with open("config/variables.ddpp", encoding="utf-8") as custom:
             for var in custom:
                 var = var.replace("\n", "")
@@ -109,8 +110,8 @@ class Config:
                 + os.path.abspath("config/variables.ddpp")
             )
         with open(f"{self.filepath}/variables.ddpp", "w", encoding="utf-8") as file:
-            for item in self.variables:
-                file.write(f"{item} {self.variables[item]}\n")
+            for key, value in self.variables.items():
+                file.write(f"{key} {value}\n")
 
     def print_config(self) -> None:
         """
@@ -126,8 +127,8 @@ class Config:
         if not exists(f"{self.filepath}/config.ddpp"):
             print("config.ddpp does not exist, creating new file at " + self.filepath)
         with open(f"{self.filepath}/config.ddpp", "w", encoding="utf-8") as file:
-            for item in self.config_file:
-                file.write(f"{item} {self.config_file[item]}\n")
+            for key, value in self.config_file.items():
+                file.write(f"{key} {value}\n")
         print(f"exported config to {self.filepath}config.ddpp")
 
 
@@ -150,17 +151,14 @@ class Weapon:
                 fixed_crit_range[fixed_crit_range.index(item)] = int(item)
         self.crit_range = fixed_crit_range
 
-    def attack_roll(self) -> tuple[int, str, int, str]:
+    def get_stats(self) -> None:
         """
-        rolls an attack using the Weapon, returns all results and rolls
-        :return:
+        prints the stats of the weapon
         """
-        attack_roll, attack_dice = mult_roll(self.attack)
-        damage_roll, damage_dice = mult_roll(self.damage)
-        for number in self.crit_range:
-            if int(number) == attack_roll:
-                damage_roll = damage_roll * 2
-        return attack_roll, attack_dice, damage_roll, damage_dice
+        print(f"Name: {self.name}")
+        print(f"Attack: {self.attack}")
+        print(f"Damage: {self.damage}")
+        print(f"Crit Range: {self.crit_range}")
 
     def export(self) -> str:
         """
@@ -173,5 +171,3 @@ class Weapon:
             crit_range += str(item) + " "
         crit_range = crit_range[:-1]
         return f"{self.name} {self.attack} {self.damage} {crit_range}"
-
-
