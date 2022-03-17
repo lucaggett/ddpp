@@ -45,11 +45,6 @@ parser.add_argument(
     help="flag to disable the import of the default config files",
     action="store_true",
 )
-parser.add_argument(
-    "-s",
-    "--stats",
-    help="show stats, requires character file as input",
-)
 parser.add_argument("--bear", help="generate a random bear", action="store_true")
 parser.add_argument(
     "--hat", help="generate a random hat. enter a series and a tier", nargs=2
@@ -65,20 +60,20 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-c = ddpp_classes.Config()
+config_object = ddpp_classes.Config()
 
 if not args.no_default:
     if os.path.exists("config/config.ddpp"):
         if args.verbose:
             print("Found config file, importing config.ddpp")
-        c.import_config()
+        config_object.import_config()
     if os.path.exists("config/variables.ddpp"):
         if args.verbose:
             print("Found variables file, importing variables.ddpp")
-        c.import_variables()
+        config_object.import_variables()
 if args.roll:
     # print(ddpp.replace_variables(args.roll, c.variables))
-    res = ddpp.mult_roll(ddpp.replace_variables(args.roll, c.variables))
+    res = ddpp.mult_roll(ddpp.replace_variables(args.roll, config_object.variables))
     print("You rolled:", res[0])
     print("Rolls:", res[1])
 
@@ -88,21 +83,17 @@ elif args.bear:
 elif args.heist:
     ddpp.generate_heist()
 
-elif args.stats:
-    imp = ddpp_classes.Character()
-    imp.import_char(args.stats)
-
 elif args.list:
     print("Shortcuts:")
-    for s, m in c.config_file.items():
+    for s, m in config_object.config_file.items():
         print("\t", s, ":", m)
     print("Variables:")
-    for v, n in c.variables.items():
+    for v, n in config_object.variables.items():
         print("\t", v, ":", n)
 
 elif args.alias:
-    if args.alias in c.config_file:
-        res, rolls = ddpp.mult_roll(c.config_file[args.alias])
+    if args.alias in config_object.config_file:
+        res, rolls = ddpp.Instructions(config_object.config_file[args.alias], config_object).roll()
         print("result is: " + str(res))
         print("you rolled: " + str(rolls))
 
@@ -128,19 +119,19 @@ elif args.config:
             print("\t'mksc' - create a shortcut")
         elif cmd == "list":
             print("Shortcuts:")
-            for s, m in c.config_file.items():
+            for s, m in config_object.config_file.items():
                 print("\t", s, ":", m)
             print("Variables:")
-            for v, n in c.variables.items():
+            for v, n in config_object.variables.items():
                 print("\t", v, ":", n)
         elif cmd == "mkvar":
-            c.create_variable()
+            config_object.create_variable()
         elif cmd == "rmvar":
-            c.delete_variable()
+            config_object.delete_variable()
         elif cmd == "rmsc":
-            c.delete_config()
+            config_object.delete_config()
         elif cmd == "mksc":
-            c.create_config()
+            config_object.create_config()
         else:
             print("Unknown command")
 else:
