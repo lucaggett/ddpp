@@ -25,7 +25,7 @@ jobs:
             stdout = sys.stdout
             sys.stdout = StringIO()
 
-            ARGS = ['pylint-badge.py', '--reports=n']
+            ARGS = ['ddpp.py', '--reports=n']
             Run(ARGS, exit=False)
             output = sys.stdout.getvalue()
             sys.stdout = stdout
