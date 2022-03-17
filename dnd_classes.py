@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from ddpp_classes import Weapon
 
 class Character(ABC):  # a 5e Character, can be imported from file
     """
