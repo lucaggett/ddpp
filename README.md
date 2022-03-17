@@ -1,6 +1,6 @@
 
 
-[![Pylint](https://github.com/CustomRoses/DnD-/actions/workflows/pylint.yml/badge.svg)](https://github.com/CustomRoses/DnD-/actions/workflows/pylint.yml) [![Tests](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml/badge.svg?branch=main)](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml) ![code size](https://img.shields.io/github/languages/code-size/CustomRoses/ddpp) ![repo size](https://img.shields.io/github/repo-size/CustomRoses/ddpp) ![](https://img.shields.io/github/commit-activity/w/CustomRoses/ddpp) ![last commit](https://img.shields.io/github/last-commit/CustomRoses/ddpp)
+[![Pylint](https://github.com/CustomRoses/ddpp/blob/main/pylint.svg)](https://github.com/CustomRoses/DnD-/actions/workflows/pylint.yml) [![Tests](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml/badge.svg?branch=main)](https://github.com/CustomRoses/DnD-/actions/workflows/unittests.yaml) ![code size](https://img.shields.io/github/languages/code-size/CustomRoses/ddpp) ![repo size](https://img.shields.io/github/repo-size/CustomRoses/ddpp) ![](https://img.shields.io/github/commit-activity/w/CustomRoses/ddpp) ![last commit](https://img.shields.io/github/last-commit/CustomRoses/ddpp)
 
 
 
