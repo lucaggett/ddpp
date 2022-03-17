@@ -9,146 +9,92 @@ import random
 import re
 import pprint
 import time
+from ddpp_classes import *
 
 
-def s_roll(number, die):  # Rolls an amount of the same dice
-    """
-    returns an int
-    generates a random number based on amount of sides of the die and the number of dice
-    """
-    total = 0
-    info = ""
-    for _ in range(number):
-        roll = random.randrange(1, die+1)
-        total += roll
-        info += str(roll) + " + "
-    return total, info[:-3]
+class Instructions:
+    def __init__(self, instructions: str, Config):
+        self.instructions = (
+            Config.config_file[instructions]
+            if instructions in Config.config_file
+            else instructions.split(" ")
+        )
+        self.config = Config
+        self.__replace_variables()
+        avg = 0
+        for instruction in self.instructions:
+            if instruction.startswith("+"):
+                avg += int(instruction[1:] / 2)
+            elif instruction.startswith("-"):
+                avg += -int(instruction[1:] / 2)
+            else:
+                avg += self.__s_avg(
+                    int(instruction.split("d")[0]), int(instruction.split("d")[1])
+                )
+        self.average = avg
 
+    def __str__(self):
+        return self.instructions
 
-def mult_roll(instructions):  # Rolls arbitrary Combinations of dice
-    """
-    returns 2 variables: total (an integer) and rolls (a string)
+    def __repr__(self):
+        return self.instructions
 
-    returns a number and a string, based on rolls and modifiers parsed from instructions
+    def __replace_variables(self):
+        for i in range(len(self.instructions)):
+            if self.instructions[i] in self.config.variables:
+                self.instructions[i] = self.config.variables[self.instructions[i]]
 
-    instructions may either be a string or a list
-    """
-    if type(instructions) == str:
-        instructions = instructions.split(" ")
-    total = 0  # Running total
-    rolls = ""  # Justification
-    for instruction in instructions:
-        if instruction.find("+") >= 0:  # Positive Modifier
-            numbers = re.sub(r"\D", "", instruction)
-            total += int(numbers)
-            rolls += str(numbers) + " + "
-        elif instruction.find("-") >= 0:  # Negative Modifier
-            numbers = re.sub(r"\D", "", instruction)
-            total -= int(numbers)
-            rolls += str(numbers) + " + "
-        elif instruction.find("d") > 0:  # Dice Roll
-            args = instruction.split("d")
-            result, info = s_roll(int(args[0]), int(args[1]))
-            total += result
-            rolls += info + " + "
-        else:  # Invalid Input
-            print("Invalid Input")
-    return total, rolls[:-3]
+    def __iter__(self):
+        """
+        return a generator object that yields all individual rolls and absolute values
+        """
+        for instruction in self.instructions:
+            if instruction.startswith("+"):
+                yield int(instruction[1:]), instruction
+            elif instruction.startswith("-"):
+                yield -int(instruction[1:]), instruction
+            else:
+                num, die = instruction.split("d")
+                yield self.s_roll(int(num), int(die))
 
+    def __add__(self, other) -> Instructions:
+        """
+        add two instructions together
+        """
+        self.instructions.extend(other.instructions)
+        return self
 
-def replace_variables(instructions, variables):
-    """
-    Replaces variables in instructions by concrete values
+    def roll(self) -> tuple[int, str]:
+        """
+        roll out every individual instruction
+        """
+        out_num = 0
+        out_str = ""
+        for roll, justify in self.__iter__():
+            out_num += roll
+            out_str += justify + " "
+        return out_num, out_str
 
-    returns sanitized input, an instruction set which mult_roll can accept
+    @staticmethod
+    def __s_avg(number, die) -> int:
+        """
+        return the average roll for a single dice roll
+        """
+        return number * (die / 2)
 
-    replaces variables with numbers parsed from a .config file and recreates the output
-    """
-    if type(instructions) == str:
-        instructions = instructions.split(" ")
-    sanitized = []
-    for instruction in instructions:
-        instruction_positive = True
-        variable_positive = True
-        if instruction.find("[") >= 0:  # If is variable
-            if instruction.find("-") >= 0:  # If instruction is subtractive
-                instruction_positive = False
-            variable_name = re.sub(r"[^A-Za-z]", "", instruction)
-            variable = str(variables.get(variable_name))
-            if variable.find("-"):  # If value of variable is negative
-                variable_positive = False
-            variable = re.sub(r"\D", "", variable)
-            if (
-                variable_positive == instruction_positive
-            ):  # If ++ or -- (thus + in total)
-                sanitized.append("+" + str(variable))
-            else:  # If +- or -+ (thus - in total)
-                sanitized.append("+" + str(variable))
-        else:  # If no instruction
-            sanitized.append(instruction)
-    return sanitized
-
-
-def roll_from_list(name, config):
-    """
-    Rolls predefined roll from variables.ddpp and config.ddpp
-    """
-    return mult_roll(replace_variables(dict.get(name), config.variables))
-
-
-def roll_from_string(string, config):
-    """
-    rolls from any string, replacing present variables if they are present.
-    """
-    inputs = string.split(" ")
-    return mult_roll(replace_variables(inputs, config.variables))
-
-
-def s_avg(number, die):
-    """
-    Returns the average value of an amount of the same die
-    """
-    return number * ((1 + die) / 2)
-
-
-def mult_avg(instructions):
-    """
-    Returns the average of an arbitrary roll
-    """
-    total = 0
-    for instruction in instructions:
-        if instruction.find("+") >= 0:
-            numbers = re.sub(r"\D", "", instruction)
-            total += int(numbers)
-        elif instruction.find("-") >= 0:
-            numbers = re.sub(r"\D", "", instruction)
-            total -= int(numbers)
-        elif instruction.find("d") > 0:
-            args = instruction.split("d")
-            result = s_avg(int(args[0]), int(args[1]))
-            total += result
-        else:
-            print("invalid")
-    return total
-
-
-def avg_from_list(name, config):
-    """
-    Returns the average of a list of rolls.
-    Supports variables and raw addition
-    """
-    return mult_avg(replace_variables(config.config_file.get(name), config.variables))
-
-
-def avg_from_string(data, var):
-    """
-    returns the average of a string of rolls
-    supports variables and raw addition
-    """
-
-    inputs = data.split(" ")
-    return mult_avg(replace_variables(inputs, var))
-
+    @staticmethod
+    def s_roll(number: int, die: int) -> (int, str):  # Rolls an amount of the same dice
+        """
+        returns an int and a justification string
+        generates a random number based on amount of sides of the die and the number of dice
+        """
+        total = 0
+        info = ""
+        for _ in range(number):
+            roll = random.randrange(1, die + 1)
+            total += roll
+            info += str(roll) + " + "
+        return total, info[:-3]
 
 def random_from_file(filepaths):
     """
