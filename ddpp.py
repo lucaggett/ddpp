@@ -4,12 +4,10 @@ the main file for the ddpp.py library.
 
 # *-* coding: utf-8 *-*
 # pylint: disable=line-too-long
-import os.path
-import random
-import re
-import pprint
-import time
 from ddpp_classes import *
+from random import randrange, choice
+from re import sub
+from pprint import pprint
 
 
 class Instructions:
@@ -91,10 +89,11 @@ class Instructions:
         total = 0
         info = ""
         for _ in range(number):
-            roll = random.randrange(1, die + 1)
+            roll = randrange(1, die + 1)
             total += roll
             info += str(roll) + " + "
         return total, info[:-3]
+
 
 def random_from_file(filepaths):
     """
@@ -106,7 +105,7 @@ def random_from_file(filepaths):
     for file in filepaths:
         with open(file, "r", encoding="utf-8") as contentfile:
             choices.append(
-                re.sub(r"(\n|\W)", "", random.choice(contentfile.readlines()))
+                sub(r"(\n|\W)", "", choice(contentfile.readlines()))
             )
     return " ".join(choices)
 
@@ -161,7 +160,7 @@ def initiative_tracker():
                     pass
                     # print(f"{to_remove} will be removed at the start of the initiative")
             if user_input == "print":
-                pprint.pprint(initiative, width=1)
+                pprint(initiative, width=1)
             if user_input == "exit":
                 active = False
 
@@ -175,9 +174,9 @@ def death_save():
     adv = input("Do you have advantage on death saves? (yes/no)")
     while failures < 3 and successes < 3:
         input("Press Enter for your next death save")
-        result = s_roll(1, 20)
+        result = Instructions.s_roll(1, 20)
         if adv in ("yes", "yup"):
-            advroll = s_roll(1, 20)
+            advroll = Instructions.s_roll(1, 20)
             oldroll = result
             if advroll > result:
                 result = advroll
@@ -199,10 +198,11 @@ def generate_heist():
     """
     generates a heist
     """
+    from time import sleep
     print("Booting Heist-a-Tron 3000")
-    time.sleep(1)
+    sleep(1)
     print("Loading...")
-    time.sleep(1)
+    sleep(1)
     loc_mod = [
         "Tiny",
         "Alien",
