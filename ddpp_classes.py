@@ -8,10 +8,10 @@ creating objects for characters and objects
 """
 import os.path
 import platform
+from abc import ABC, abstractmethod
 from os.path import exists
 import sys
 from ddpp import *
-
 
 
 class Config:
@@ -134,6 +134,7 @@ class Config:
                 file.write(f"{item} {self.config_file[item]}\n")
         print(f"exported config to {self.filepath}config.ddpp")
 
+
 class Weapon:
     """
     A class representing a Weapon in 5e, contains fields
@@ -149,22 +150,23 @@ class Weapon:
         self.damage = damage
         fixed_crit_range = crit_range
         for item in fixed_crit_range:  # kind of a shitty way to do this, but whatever
-            fixed_crit_range[fixed_crit_range.index(item)] = int(item)
+            if not isinstance(item, int):
+                fixed_crit_range[fixed_crit_range.index(item)] = int(item)
         self.crit_range = fixed_crit_range
 
-    def attack_roll(self) -> int:
+    def attack_roll(self) -> tuple[int, str, int, str]:
         """
         rolls an attack using the Weapon, returns all results and rolls
         :return:
         """
-        attack_roll, attack_dice = ddpp.mult_roll(self.attack)
-        damage_roll, damage_dice = ddpp.mult_roll(self.damage)
+        attack_roll, attack_dice = mult_roll(self.attack)
+        damage_roll, damage_dice = mult_roll(self.damage)
         for number in self.crit_range:
             if int(number) == attack_roll:
                 damage_roll = damage_roll * 2
         return attack_roll, attack_dice, damage_roll, damage_dice
 
-    def export(self) -> None:
+    def export(self) -> str:
         """
         helps export the Weapon to a Character.config file. Returns a string
         containing the weapons Name, attack , damage, and crit range
@@ -177,7 +179,7 @@ class Weapon:
         return f"{self.name} {self.attack} {self.damage} {crit_range}"
 
 
-class Character:  # a 5e Character, can be imported from file
+class Character(ABC):  # a 5e Character, can be imported from file
     """
     returns a Character object, with most of the stats from a 5e Character sheet.
     Weopons are created using the Weapon class.
@@ -185,15 +187,11 @@ class Character:  # a 5e Character, can be imported from file
 
     def __init__(self):
         self.name = ""
-        self.strength = 0
-        self.dexterity = 0
-        self.constitution = 0
-        self.intelligence = 0
-        self.wisdom = 0
-        self.charisma = 0
-        self.health_points = 0
+        self.stats = {"strength": 0, "dexterity": 0, "constitution": 0, "intelligence": 0, "wisdom": 0, "charisma": 0}
+        self.speed = 0
+        self.armor_class = 0
+        self.hp = 0
         self.proficiency = 0
-        self.initiative = 0
         self.speed = 0
         self.armor_class = 0
         self.weapon = Weapon(
@@ -208,39 +206,14 @@ class Character:  # a 5e Character, can be imported from file
         imports Character stats from a file.
         """
         with open(filepath, encoding="utf-8") as character:
+            attrs = vars(self)
             for line in character:
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
-                if line_tok[0] == "strength":
-                    self.strength = int(line_tok[1])
-                elif line_tok[0] == "name":
-                    self.name = line_tok[1]
-                elif line_tok[0] == "dexterity":
-                    self.dexterity = int(line_tok[1])
-                elif line_tok[0] == "constitution":
-                    self.constitution = int(line_tok[1])
-                elif line_tok[0] == "intelligence":
-                    self.intelligence = int(line_tok[1])
-                elif line_tok[0] == "wisdom":
-                    self.wisdom = int(line_tok[1])
-                elif line_tok[0] == "charisma":
-                    self.charisma = int(line_tok[1])
-                elif line_tok[0] == "health_points":
-                    self.health_points = int(line_tok[1])
-                elif line_tok[0] == "proficiency":
-                    self.proficiency = int(line_tok[1])
-                elif line_tok[0] == "initiative":
-                    self.initiative = int(line_tok[1])
-                elif line_tok[0] == "speed":
-                    self.speed = int(line_tok[1])
-                elif line_tok[0] == "armor_class":
-                    self.armor_class = int(line_tok[1])
-                elif line_tok[0] == "Weapon":
-                    self.weapon = Weapon(
-                        line_tok[1], line_tok[2], line_tok[3], line_tok[4:]
-                    )
-                else:
-                    print("Error: Invalid Stat " + line_tok[0])
+                if line_tok[0] in self.stats:
+                    self.stats[line_tok[0]] = line_tok[1]
+                elif line_tok[0] in attrs:
+                    self.__setattr__(line_tok[0], line_tok[1])
 
     def export_character(self) -> None:
         """
@@ -258,16 +231,11 @@ class Character:  # a 5e Character, can be imported from file
         """
         creates a Character object.
         """
+
         self.name = input("Enter Character Name: ")
-        self.strength = int(input("Enter Strength: "))
-        self.dexterity = int(input("Enter Dexterity: "))
-        self.constitution = int(input("Enter Constitution: "))
-        self.intelligence = int(input("Enter Intelligence: "))
-        self.wisdom = int(input("Enter Wisdom: "))
-        self.charisma = int(input("Enter Charisma: "))
-        self.health_points = int(input("Enter Hitpoints: "))
+        for stat in self.stats:
+            self.stats[stat] = input(f"Enter {stat}: ")
         self.proficiency = int(input("Enter Proficiency_bonus Bonus: "))
-        self.initiative = int(input("Enter Initiative: "))
         self.speed = int(input("Enter Speed: "))
         self.armor_class = int(input("Enter armor_class: "))
         self.weapon = Weapon(
@@ -277,8 +245,9 @@ class Character:  # a 5e Character, can be imported from file
             input("Enter Weapon Crit Range: ").split(","),
         )
 
+    @abstractmethod
     def attack(self) -> int:
         """
         makes an attack!
         """
-        return self.weapon.attack_roll()
+        pass
