@@ -56,7 +56,7 @@ class Config:
             for line in config_data:
                 line = line.replace("\n", "")
                 line_tok = line.split(" ")
-                localdict = {line_tok[0]: line_tok[1: len(line_tok)]}
+                localdict = {line_tok[0]: line_tok[1 : len(line_tok)]}
                 self.config_file.update(localdict)
         return self.config_file
 
@@ -125,10 +125,7 @@ class Config:
         exports the currently imported configuration data to a file
         """
         if not exists(f"{self.filepath}/config.ddpp"):
-            print(
-                "config.ddpp does not exist, creating new file at "
-                + self.filepath
-            )
+            print("config.ddpp does not exist, creating new file at " + self.filepath)
         with open(f"{self.filepath}/config.ddpp", "w", encoding="utf-8") as file:
             for item in self.config_file:
                 file.write(f"{item} {self.config_file[item]}\n")
@@ -187,7 +184,14 @@ class Character(ABC):  # a 5e Character, can be imported from file
 
     def __init__(self):
         self.name = ""
-        self.stats = {"strength": 0, "dexterity": 0, "constitution": 0, "intelligence": 0, "wisdom": 0, "charisma": 0}
+        self.stats = {
+            "strength": 0,
+            "dexterity": 0,
+            "constitution": 0,
+            "intelligence": 0,
+            "wisdom": 0,
+            "charisma": 0,
+        }
         self.speed = 0
         self.armor_class = 0
         self.hp = 0

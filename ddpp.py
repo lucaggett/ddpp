@@ -14,17 +14,23 @@ from ddpp_classes import *
 
 class Instructions:
     def __init__(self, instructions: str, Config):
-        self.instructions = Config.config_file[instructions] if instructions in Config.config_file else instructions.split(" ")
+        self.instructions = (
+            Config.config_file[instructions]
+            if instructions in Config.config_file
+            else instructions.split(" ")
+        )
         self.config = Config
         self.__replace_variables()
         avg = 0
         for instruction in self.instructions:
-            if instruction.startswith('+'):
+            if instruction.startswith("+"):
                 avg += int(instruction[1:] / 2)
-            elif instruction.startswith('-'):
+            elif instruction.startswith("-"):
                 avg += -int(instruction[1:] / 2)
             else:
-                avg += self.__s_avg(int(instruction.split('d')[0]), int(instruction.split('d')[1]))
+                avg += self.__s_avg(
+                    int(instruction.split("d")[0]), int(instruction.split("d")[1])
+                )
         self.average = avg
 
     def __str__(self):
@@ -43,85 +49,52 @@ class Instructions:
         return a generator object that yields all individual rolls and absolute values
         """
         for instruction in self.instructions:
-            if instruction.startswith('+'):
+            if instruction.startswith("+"):
                 yield int(instruction[1:]), instruction
-            elif instruction.startswith('-'):
+            elif instruction.startswith("-"):
                 yield -int(instruction[1:]), instruction
             else:
-                yield s_roll(int(instruction.split('d')[0]), int(instruction.split('d')[1]))
+                num, die = instruction.split("d")
+                yield self.s_roll(int(num), int(die))
+
+    def __add__(self, other) -> Instructions:
+        """
+        add two instructions together
+        """
+        self.instructions.extend(other.instructions)
+        return self
+
+    def roll(self) -> tuple[int, str]:
+        """
+        roll out every individual instruction
+        """
+        out_num = 0
+        out_str = ""
+        for roll, justify in self.__iter__():
+            out_num += roll
+            out_str += justify + " "
+        return out_num, out_str
 
     @staticmethod
-    def __s_avg(number, die):
+    def __s_avg(number, die) -> int:
         """
         return the average roll for a single dice roll
         """
-        return number*(die/2)
+        return number * (die / 2)
 
-
-
-def s_roll(number: int, die: int) -> (int, str):  # Rolls an amount of the same dice
-    """
-    returns an int and a justification string
-    generates a random number based on amount of sides of the die and the number of dice
-    """
-    total = 0
-    info = ""
-    for _ in range(number):
-        roll = random.randrange(1, die+1)
-        total += roll
-        info += str(roll) + " + "
-    return total, info[:-3]
-
-
-def mult_roll(ins: Instructions):  # Rolls arbitrary Combinations of dice
-    """
-    TODO: Reimplement
-    """
-    total = 0
-    info = ""
-    for result, justify in ins:
-        total += result
-        info += justify + " + "
-    return total, info[:-3]
-
-
-def roll_from_list(name, config):
-    """
-    TODO: Reimplement
-    """
-    ins = Instructions(name, config)
-    return mult_roll(ins)
-
-
-def roll_from_string(string, config):
-    """
-    TODO: Reimplement
-    """
-    ins = Instructions(string, config)
-    return mult_roll(ins)
-
-
-def mult_avg(ins: Instructions):
-    """
-    TODO: Reimplement
-    """
-    return ins.average
-
-
-
-def avg_from_list(name, config):
-    """
-    TODO: Reimplement
-    """
-    return Instructions(name, config).average
-
-
-def avg_from_string(data, var):
-    """
-    TODO: Reimplement
-    """
-    return Instructions(data, var).average
-
+    @staticmethod
+    def s_roll(number: int, die: int) -> (int, str):  # Rolls an amount of the same dice
+        """
+        returns an int and a justification string
+        generates a random number based on amount of sides of the die and the number of dice
+        """
+        total = 0
+        info = ""
+        for _ in range(number):
+            roll = random.randrange(1, die + 1)
+            total += roll
+            info += str(roll) + " + "
+        return total, info[:-3]
 
 def random_from_file(filepaths):
     """
