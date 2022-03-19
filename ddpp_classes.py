@@ -73,8 +73,7 @@ class Config:
         Imports the variables file, and then returns the imported data
         """
         if not exists(f"{self.filepath}variables.ddpp"):
-            raise FileNotFoundError("No variables file found")
-
+            print("No variables file found")
 
         with open("config/variables.ddpp", encoding="utf-8") as custom:
             for var in custom:
