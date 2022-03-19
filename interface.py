@@ -73,7 +73,7 @@ if not args.no_default:
         config_object.import_variables()
 if args.roll:
     # print(ddpp.replace_variables(args.roll, c.variables))
-    res = ddpp.mult_roll(ddpp.replace_variables(args.roll, config_object.variables))
+    res = ddpp.Instructions(args.roll, config_object).roll()
     print("You rolled:", res[0])
     print("Rolls:", res[1])
 
@@ -93,7 +93,9 @@ elif args.list:
 
 elif args.alias:
     if args.alias in config_object.config_file:
-        res, rolls = ddpp.Instructions(config_object.config_file[args.alias], config_object).roll()
+        res, rolls = ddpp.Instructions(
+            config_object.config_file[args.alias], config_object
+        ).roll()
         print("result is: " + str(res))
         print("you rolled: " + str(rolls))
 
