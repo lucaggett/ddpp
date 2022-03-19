@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from ddpp_classes import Weapon
+from ddpp import Instructions
+
 
 class Character(ABC):  # a 5e Character, can be imported from file
     """
@@ -21,20 +23,13 @@ class Character(ABC):  # a 5e Character, can be imported from file
         self.armor_class = 0
         self.hp = 0
         self.proficiency = 0
-        self.speed = 0
-        self.armor_class = 0
         self.proficiencies = []
         self.saving_throws = []
-        self.skills = []
-        self.weapons = []
-        self.equipment = []
-        self.features = []
-        self.languages = []
         self.weapon = Weapon(
-            "If you see this something went wrong",
-            "1d100",
-            "1d100",
-            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            "Invalid",
+            "Invalid",
+            "Invalid",
+            "Invalid",
         )
 
     def import_char(self, filepath) -> None:
@@ -57,11 +52,11 @@ class Character(ABC):  # a 5e Character, can be imported from file
         """
         stats = vars(self)
         with open(f"text/{self.name}.txt", "w", encoding="utf-8") as file:
-            for stat in stats:
+            for stat, value in stats.items():
                 if stat == "weapon":
                     file.write(f"Weapon {self.weapon.export()}")
                 else:
-                    file.write(f"{stat} {stats[stat]}\n")
+                    file.write(f"{stat} {value}\n")
 
     def create_character(self) -> None:
         """
