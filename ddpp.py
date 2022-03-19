@@ -17,14 +17,22 @@ class Instructions:
     A class holding rolling instructions, which are used to generate random dice rolls
     """
 
-    def __init__(self, instructions: str, config=None):
+    def __init__(self, instructions: str or [str], config=None):
         if not config:
             config = Config()
         self.instructions = (
+            # implementation for aliases
             config.config_file[instructions]
             if instructions in config.config_file
-            else instructions.split(" ")
+            # check for strings, split into array
+            else instructions.split(" ") if isinstance(instructions, str)
+            # if a list was passed, use it
+            else instructions if isinstance(instructions, list)
+            # if none of the above, pass None which will raise an error
+            else None
         )
+        if instructions is None:
+            raise TypeError("instructions must be a string or list")
         self.config = config
         self.__replace_variables()
         avg = 0
@@ -40,12 +48,15 @@ class Instructions:
         self.average = avg
 
     def __str__(self):
-        return "".join(self.instructions)
+        return f"dice: {''.join(self.instructions)} | average: {self.average}"
 
     def __repr__(self):
-        return "".join(self.instructions)
+        return f"dice: {''.join(self.instructions)} |  average: {self.average}"
 
     def __replace_variables(self):
+        """
+        replace variables in the instructions with their values from the config file
+        """
         for idx, instruction in enumerate(self.instructions[:]):
             if instruction in self.config.variables:
                 self.instructions[idx] = self.config.variables[self.instructions[idx]]
@@ -112,15 +123,13 @@ def from_file(filepaths):
     choices = []
     for file in filepaths:
         with open(file, "r", encoding="utf-8") as contentfile:
-            choices.append(
-                sub(r"(\n|\W)", "", choice(contentfile.readlines()))
-            )
+            choices.append(sub(r"(\n|\W)", "", choice(contentfile.readlines())))
     return " ".join(choices)
 
 
 def initiative_tracker():
     """
-    Starts an initiative tracker, initialised as an empty combat.
+    TODO: Finish this, it's currently broken and pretty useless
     """
     initiative_temp = {}
     active = True
