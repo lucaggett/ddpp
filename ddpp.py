@@ -21,16 +21,17 @@ class Instructions:
         if not config:
             config = Config()
         self.instructions = (
-            # implementation for aliases
-            config.config_file[instructions]
-            if instructions in config.config_file
-            # check for strings, split into array
+            config.config_file[instructions] if instructions in config.config_file
             else instructions.split(" ") if isinstance(instructions, str)
-            # if a list was passed, use it
             else instructions if isinstance(instructions, list)
-            # if none of the above, pass None which will raise an error
             else None
         )
+        # implementation for aliases
+        # check for strings, split into array
+        # if a list was passed, use it
+        # if none of the above, pass None which will raise an error
+
+        print(self.instructions)
         if instructions is None:
             raise TypeError("instructions must be a string or list")
         self.config = config
@@ -78,8 +79,33 @@ class Instructions:
         """
         add two instructions together
         """
-        self.instructions.extend(other.instructions)
+        if isinstance(other, Instructions):
+            self.instructions.extend(other.instructions)
+        elif isinstance(other, str):
+            self.instructions.append(other)
+        elif isinstance(other, int):
+            self.instructions.append(f"+{other}")
+        else:
+            raise TypeError(f"unsupported type {type(other)}")
         return self
+
+    def __iadd__(self, other):
+        return self.__add__(other)
+
+
+    def __sub__(self, other):
+        """
+        subtract two instructions
+        """
+        if isinstance(other, int):
+            self.instructions.append(f"-{other}")
+        else:
+            raise TypeError(f"unsupported type {type(other)}")
+
+        return self
+
+    def __isub__(self, other):
+        return self.__sub__(other)
 
     def roll(self) -> tuple[int, str]:
         """
