@@ -1,6 +1,10 @@
+"""
+Object-Oriented implementation of DnD classes.
+"""
+
+
 from abc import ABC, abstractmethod
 from ddpp_classes import Weapon
-from ddpp import Instructions
 
 
 class Character(ABC):  # a 5e Character, can be imported from file
@@ -9,6 +13,7 @@ class Character(ABC):  # a 5e Character, can be imported from file
     Weopons are created using the Weapon class.
     """
 
+    # pylint: disable=too-many-instance-attributes
     def __init__(self):
         self.name = ""
         self.stats = {
@@ -21,16 +26,10 @@ class Character(ABC):  # a 5e Character, can be imported from file
         }
         self.speed = 0
         self.armor_class = 0
-        self.hp = 0
+        self.health = 0
         self.proficiency_bonus = 0
         self.proficiencies = []
-        self.saving_throws = []
-        self.weapon = Weapon(
-            "Invalid",
-            "Invalid",
-            "Invalid",
-            "Invalid",
-        )
+        self.weapon = None
 
     def import_char(self, filepath) -> None:
         """
@@ -66,7 +65,7 @@ class Character(ABC):  # a 5e Character, can be imported from file
         self.name = input("Enter Character Name: ")
         for stat in self.stats:
             self.stats[stat] = input(f"Enter {stat}: ")
-        self.proficiency = int(input("Enter Proficiency_bonus Bonus: "))
+        self.proficiency_bonus = int(input("Enter Proficiency_bonus Bonus: "))
         self.speed = int(input("Enter Speed: "))
         self.armor_class = int(input("Enter armor_class: "))
         self.weapon = Weapon(
@@ -81,4 +80,3 @@ class Character(ABC):  # a 5e Character, can be imported from file
         """
         makes an attack!
         """
-        pass

@@ -5,9 +5,6 @@ This is a command line interface for ddpp.py.
 import argparse
 import os
 import platform
-import sys
-import time
-
 import ddpp
 import ddpp_classes
 
@@ -103,7 +100,8 @@ elif args.config:
     ACTIVE = True
     print(
         f"Welcome to the interactive configuration editor for ddpp!\nRunning on "
-        f"{platform.system()} {platform.release()} ({platform.architecture()[0]} {platform.machine()})"
+        f"{platform.system()} {platform.release()} "
+        f"({platform.architecture()[0]} {platform.machine()})"
     )
     print("Type 'exit' to quit.")
     print("Type 'help' for help.\n")
