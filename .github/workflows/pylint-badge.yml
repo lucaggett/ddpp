@@ -9,11 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - name: Install dependencies
+      - name: Install dependencies and clear old pylint.svg
         run: |
           python -m pip install --upgrade pip
           pip install pylint
           pip install anybadge
+          rm pylint.svg
       - uses: jannekem/run-python-script-action@v1
         with:
           script: |
@@ -25,7 +26,7 @@ jobs:
             stdout = sys.stdout
             sys.stdout = StringIO()
 
-            ARGS = ['ddpp.py', '--reports=n']
+            ARGS = ['ddpp.py', 'ddpp_classes.py', 'dnd_classes.py', 'interface.py', '--reports=n']
             Run(ARGS, exit=False)
             output = sys.stdout.getvalue()
             sys.stdout = stdout
@@ -42,13 +43,13 @@ jobs:
       - name: Commit files
         id: commit
         run: |
-            git config --local user.email "action@github.com"
-            git config --local user.name "github-actions"
+            git config --local user.email "luc@nothome.xyz"
+            git config --local user.name "pylint-badge"
             git add --all
               if [-z "$(git status --porcelain)"]; then
             echo "::set-output name=push::false"
             else
-            git commit -m "Add changes" -a
+            git commit -m "update pylint.svg" -a
             echo "::set-output name=push::true"
             fi
         shell: bash
