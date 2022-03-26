@@ -26,7 +26,7 @@ jobs:
             stdout = sys.stdout
             sys.stdout = StringIO()
 
-            ARGS = ['ddpp.py', '--reports=n']
+            ARGS = ['ddpp.py', 'ddpp_classes.py', 'dnd_classes.py', 'interface.py', '--reports=n']
             Run(ARGS, exit=False)
             output = sys.stdout.getvalue()
             sys.stdout = stdout
