@@ -48,6 +48,12 @@ class Instructions:
                 )
         self.average = avg
 
+    def __getitem__(self, item):
+        """
+        return the item at the index
+        """
+        return self.instructions[item]
+
     def __str__(self):
         return f"dice: {''.join(self.instructions)} | average: {self.average}"
 
