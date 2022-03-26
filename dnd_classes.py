@@ -22,7 +22,7 @@ class Character(ABC):  # a 5e Character, can be imported from file
         self.speed = 0
         self.armor_class = 0
         self.hp = 0
-        self.proficiency = 0
+        self.proficiency_bonus = 0
         self.proficiencies = []
         self.saving_throws = []
         self.weapon = Weapon(
