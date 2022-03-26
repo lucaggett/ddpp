@@ -42,6 +42,7 @@ jobs:
       - name: Commit files
         id: commit
         run: |
+            rm pylint.svg
             git config --local user.email "action@github.com"
             git config --local user.name "github-actions"
             git add --all
