@@ -49,14 +49,12 @@ class DDPPTest(unittest.TestCase):
         self.assertLess(abs(deviation), 0.02)
         print("\ns_roll deviation from norm: " + str(deviation) + "\n")
 
-
     def test_roll(self):
         """
         test for mult_roll
         """
         self.assertIn(ddpp.Instructions("1d20 +8").roll()[0], range(9, 29))
         self.assertIn(ddpp.Instructions("1d20").roll()[0], range(1, 21))
-
 
 
 if __name__ == "__main__":

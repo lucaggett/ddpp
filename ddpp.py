@@ -21,9 +21,12 @@ class Instructions:
         if not config:
             config = Config()
         self.instructions = (
-            config.config_file[instructions] if instructions in config.config_file
-            else instructions.split(" ") if isinstance(instructions, str)
-            else instructions if isinstance(instructions, list)
+            config.config_file[instructions]
+            if instructions in config.config_file
+            else instructions.split(" ")
+            if isinstance(instructions, str)
+            else instructions
+            if isinstance(instructions, list)
             else None
         )
         # implementation for aliases

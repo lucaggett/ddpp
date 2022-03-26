@@ -2,29 +2,38 @@
 Object-Oriented implementation of DnD classes.
 """
 
-
 from abc import ABC, abstractmethod
 from ddpp_classes import Weapon
 
-#pylint: disable=invalid-name
+
+# pylint: disable=invalid-name
 class dnd_Character(ABC):  # a 5e Character, can be imported from file
     """
     returns a Character object, with most of the stats from a 5e Character sheet.
     Weopons are created using the Weapon class.
     """
 
-    
-
     # pylint: disable=too-many-instance-attributes
-    def __init__(self, name="", level=1, stats=None, armor_class=0, health=0, proficiency_bonus=0, proficiencies=None, weapon=None) -> None:
+    # pylint: disable=too-many-arguments
+    def __init__(
+        self,
+        name="",
+        level=1,
+        stats=None,
+        armor_class=0,
+        health=0,
+        proficiency_bonus=0,
+        proficiencies=None,
+        weapon=None,
+    ) -> None:
         if stats is None:
             stats = {
-            "strength": 0,
-            "dexterity": 0,
-            "constitution": 0,
-            "intelligence": 0,
-            "wisdom": 0,
-            "charisma": 0,
+                "strength": 0,
+                "dexterity": 0,
+                "constitution": 0,
+                "intelligence": 0,
+                "wisdom": 0,
+                "charisma": 0,
             }
         self.name = name
         self.level = level
