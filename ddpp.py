@@ -93,11 +93,10 @@ class Instructions:
             self.instructions.append(f"+{other}")
         else:
             raise TypeError(f"unsupported type {type(other)}")
-        return self
+        return Instructions(self.instructions, self.config)
 
     def __iadd__(self, other):
         return self.__add__(other)
-
 
     def __sub__(self, other):
         """
