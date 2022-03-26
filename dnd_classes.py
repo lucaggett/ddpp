@@ -6,30 +6,34 @@ Object-Oriented implementation of DnD classes.
 from abc import ABC, abstractmethod
 from ddpp_classes import Weapon
 
-
-class Character(ABC):  # a 5e Character, can be imported from file
+#pylint: disable=invalid-name
+class dnd_Character(ABC):  # a 5e Character, can be imported from file
     """
     returns a Character object, with most of the stats from a 5e Character sheet.
     Weopons are created using the Weapon class.
     """
 
+    
+
     # pylint: disable=too-many-instance-attributes
-    def __init__(self):
-        self.name = ""
-        self.stats = {
+    def __init__(self, name="", level=1, stats=None, armor_class=0, health=0, proficiency_bonus=0, proficiencies=None, weapon=None) -> None:
+        if stats is None:
+            stats = {
             "strength": 0,
             "dexterity": 0,
             "constitution": 0,
             "intelligence": 0,
             "wisdom": 0,
             "charisma": 0,
-        }
-        self.speed = 0
-        self.armor_class = 0
-        self.health = 0
-        self.proficiency_bonus = 0
-        self.proficiencies = []
-        self.weapon = None
+            }
+        self.name = name
+        self.level = level
+        self.armor_class = armor_class
+        self.health = health
+        self.stats = stats
+        self.proficiency_bonus = proficiency_bonus
+        self.proficiencies = [] if not proficiencies else proficiencies
+        self.weapon = weapon if weapon else None
 
     def import_char(self, filepath) -> None:
         """
@@ -64,9 +68,8 @@ class Character(ABC):  # a 5e Character, can be imported from file
 
         self.name = input("Enter Character Name: ")
         for stat in self.stats:
-            self.stats[stat] = input(f"Enter {stat}: ")
+            self.stats[stat] = int(input(f"Enter {stat}: "))
         self.proficiency_bonus = int(input("Enter Proficiency_bonus Bonus: "))
-        self.speed = int(input("Enter Speed: "))
         self.armor_class = int(input("Enter armor_class: "))
         self.weapon = Weapon(
             input("Enter Weapon Name: "),
@@ -80,3 +83,6 @@ class Character(ABC):  # a 5e Character, can be imported from file
         """
         makes an attack!
         """
+        if isinstance(self.weapon, Weapon):
+            return self.weapon.attack()
+        return self.stats["strength"]
