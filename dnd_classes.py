@@ -95,3 +95,7 @@ class dnd_Character(ABC):  # a 5e Character, can be imported from file
         if isinstance(self.weapon, Weapon):
             return self.weapon.attack()
         return self.stats["strength"]
+
+
+class dnd_Creature:
+    pass
