@@ -6,6 +6,7 @@ import json
 import os
 
 # path from project root to database files
+import random
 from abc import ABC, abstractmethod
 import os
 from random import choice
@@ -51,12 +52,23 @@ class Database(ABC):
         """
         source_data = {}
         for source in self.sources:
-            source_data = json.loads(rf"{self.filepath}\{self.database_type}\{source}")
-            for creature in source_data:
-                if creature not in self.database:
-                    self.database[creature] = source_data[creature]
+            if "bestiary" not in source.split("-")[0]:
+                # if the source file name does not contain bestiary, we skip it
+                continue
+            data = []
+            with open(os.path.join(JSONPATH, self.database_type, source)) as f:
+                print(os.path.join(JSONPATH, self.database_type, source))
+                data += json.load(f).get("monster")
+        print(random.choice(data))
+        for entry in source_data.items():
+            print(entry)
+            if entry[0] not in self.database:
+                self.database[source_data["name"]] = source_data[entry]
         return self.database
 
+
+        def create_creature_object(self, creature: dict):
+            pass
 
 class Bestiary(Database):
     """
@@ -70,18 +82,20 @@ class Bestiary(Database):
         self.database_type = "bestiary"
         super().__init__(database_name, filepath, sources)
 
-
     def get_available_sources(self) -> list:
         """
         returns a list of available sources for the database
         """
         return self.available_sources_creatures
 
+
+
+
 class Spells(Database):
     """
     spell loading handler
     """
-    
+
     def __init__(self, database_name, filepath=JSONPATH, sources=None):
         """
         initializes the spell database
@@ -96,3 +110,6 @@ class Spells(Database):
         return self.available_sources_spells
 
 
+if __name__ == "__main__":
+    bestiary = Bestiary("bestiary")
+    bestiary.import_source_data()
