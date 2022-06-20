@@ -18,6 +18,7 @@ class Database(ABC):
     """
     this class handles the loading of databases
     """
+
     available_sources_creatures = os.listdir(f"{JSONPATH}\bestiary")
     available_sources_spells = os.listdir(f"{JSONPATH}\spells")
     database_type = None
@@ -74,4 +75,3 @@ class Bestiary(Database):
         returns a list of available sources for the database
         """
         return self.available_sources_creatures
-
