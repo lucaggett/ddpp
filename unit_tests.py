@@ -8,6 +8,7 @@ import time
 import unittest
 import ddpp
 import ddpp_classes
+import databases
 
 
 class DDPPTest(unittest.TestCase):
@@ -55,6 +56,20 @@ class DDPPTest(unittest.TestCase):
         """
         self.assertIn(ddpp.Instructions("1d20 +8").roll()[0], range(9, 29))
         self.assertIn(ddpp.Instructions("1d20").roll()[0], range(1, 21))
+
+
+class Databeses_Test(unittest.TestCase):
+    """
+    Test the databases module
+    """
+
+    def test_bestiary(self):
+        """
+        test for bestiary
+        """
+        bestiary = databases.Bestiary()
+        self.assertIn(bestiary.get_random_entity()["name"], bestiary.db.keys())
+
 
 
 if __name__ == "__main__":
