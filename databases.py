@@ -11,7 +11,7 @@ import os
 from random import choice
 
 projectroot = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-JSONPATH = str(projectroot) + "\\JSON"
+JSONPATH = str(projectroot) + r"/JSON"
 
 
 class Database(ABC):
@@ -19,8 +19,8 @@ class Database(ABC):
     this class handles the loading of databases
     """
 
-    available_sources_creatures = os.listdir(f"{JSONPATH}\bestiary")
-    available_sources_spells = os.listdir(f"{JSONPATH}\spells")
+    available_sources_creatures = os.listdir(f"{JSONPATH}/bestiary")
+    available_sources_spells = os.listdir(f"{JSONPATH}/spells")
     database_type = None
 
     def __init__(self, database_name: str, filepath: str = JSONPATH, sources=None):
@@ -67,11 +67,32 @@ class Bestiary(Database):
         """
         initializes the bestiary database
         """
-        super().__init__(database_name, filepath, sources)
         self.database_type = "bestiary"
+        super().__init__(database_name, filepath, sources)
+
 
     def get_available_sources(self) -> list:
         """
         returns a list of available sources for the database
         """
         return self.available_sources_creatures
+
+class Spells(Database):
+    """
+    spell loading handler
+    """
+    
+    def __init__(self, database_name, filepath=JSONPATH, sources=None):
+        """
+        initializes the spell database
+        """
+        super().__init__(database_name, filepath, sources)
+        self.database_type = "spells"
+
+    def get_available_sources(self) -> list:
+        """
+        returns a list of available sources for the database
+        """
+        return self.available_sources_spells
+
+
