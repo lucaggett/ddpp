@@ -9,6 +9,39 @@ creating objects for characters and objects
 import os.path
 import platform
 from os.path import exists
+from abc import ABC, abstractmethod
+
+
+
+
+class DND_Object(ABC):
+    """
+    Abstract class for DnD objects.
+    """
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+
+
+class DND_Creature(ABC):
+    """
+    Abstract class for DnD creatures.
+    """
+    def __init__(self, name, description, armor_class, health, stats, proficiency_bonus, proficiencies):
+        self.name = name
+        self.description = description
+        self.armor_class = armor_class
+        self.health = health
+        self.stats = stats
+        self.proficiency_bonus = proficiency_bonus
+        self.proficiencies = proficiencies
+
+
 
 
 class Config:
@@ -129,6 +162,10 @@ class Config:
             for key, value in self.config_file.items():
                 file.write(f"{key} {value}\n")
         print(f"exported config to {self.filepath}config.ddpp")
+
+
+
+
 
 
 class Weapon:

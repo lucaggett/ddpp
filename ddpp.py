@@ -10,7 +10,10 @@ from pprint import pprint
 from os.path import abspath
 from time import sleep
 from ddpp_classes import Config
+import json
 
+class Monster_Manual:
+    pass
 
 class Instructions:
     """
