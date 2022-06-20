@@ -13,10 +13,6 @@ from ddpp_classes import Config
 import json
 
 
-class Monster_Manual:
-    pass
-
-
 class Instructions:
     """
     A class holding rolling instructions, which are used to generate random dice rolls
