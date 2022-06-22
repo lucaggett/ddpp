@@ -53,15 +53,8 @@ class Database(ABC):
     """
     this class handles the loading of databases
     """
-<<<<<<< Updated upstream
-
-    available_sources_creatures = os.listdir(f"{JSONPATH}/bestiary")
-    available_sources_spells = os.listdir(f"{JSONPATH}/spells")
-    database_type = None
-=======
     available_sources_creatures = os.listdir(rf"{JSONPATH}\bestiary")
     available_sources_spells = os.listdir(rf"{JSONPATH}\spells")
->>>>>>> Stashed changes
 
     def __init__(self, database_name: str, filepath: str = JSONPATH, sources=None):
         """
@@ -69,20 +62,11 @@ class Database(ABC):
         """
         self.database_name = database_name
         self.filepath = filepath
-<<<<<<< Updated upstream
-        self.sources = sources if sources else self.get_available_sources()
-        self.database = {}
-
-    @abstractmethod
-    def get_available_sources(self) -> list:
-        """
-        returns a list of available sources for the database
-        """
-        pass
-=======
-        self.sources = sources
+        if not sources:
+            self.get_available_sources()
+        else:
+            self.sources = sources
         self.db = {}
-        self.database_type = None
 
     def get_available_sources(self):
         """
@@ -91,7 +75,7 @@ class Database(ABC):
         self.sources = [file for file in os.listdir(rf"{self.filepath}\{self.database_type}") if file.startswith("bestiary")]
         print(self.sources)
         return self
->>>>>>> Stashed changes
+
 
     def get_random_entity(self) -> dict:
         """
@@ -103,27 +87,6 @@ class Database(ABC):
         """
         returns a dictionary of the source data for the database
         """
-<<<<<<< Updated upstream
-        source_data = {}
-        for source in self.sources:
-            if "bestiary" not in source.split("-")[0]:
-                # if the source file name does not contain bestiary, we skip it
-                continue
-            data = []
-            with open(os.path.join(JSONPATH, self.database_type, source)) as f:
-                print(os.path.join(JSONPATH, self.database_type, source))
-                data += json.load(f).get("monster")
-        print(random.choice(data))
-        for entry in source_data.items():
-            print(entry)
-            if entry[0] not in self.database:
-                self.database[source_data["name"]] = source_data[entry]
-        return self.database
-
-
-        def create_creature_object(self, creature: dict):
-            pass
-=======
         if not self.database_type:
             raise NotImplementedError("database_type not set, all subclasses of database must set this")
         source_data = []
@@ -136,7 +99,6 @@ class Database(ABC):
                 monsters.update({monster["name"]: monster})
         self.db = monsters
         return self
->>>>>>> Stashed changes
 
 class Bestiary(Database):
     """
@@ -163,7 +125,7 @@ class Bestiary(Database):
         """
         output = []
         for monster in self.db.values():
-            if normalize_cr(monster["cr"]) == cr:
+            if normalize_cr(monster.get('cr', '1000')) == cr:
                 output.append(monster)
         return output
 
@@ -182,7 +144,7 @@ class Spells(Database):
         super().__init__(database_name, filepath, sources)
         self.database_type = "spells"
 
-<<<<<<< Updated upstream
+
     def get_available_sources(self) -> list:
         """
         returns a list of available sources for the database
@@ -193,11 +155,11 @@ class Spells(Database):
 if __name__ == "__main__":
     bestiary = Bestiary("bestiary")
     bestiary.import_source_data()
-=======
+
 
 if __name__ == "__main__":
     bestiary = Bestiary("bestiary")
-    print(bestiary.get_available_sources().import_source_data().get_random_entity())
+    print(bestiary.get_available_sources())
+    bestiary.import_source_data()
     print(bestiary.search_by_name("Bearded Devil"))
-    print(bestiary.search_by_cr(2))
->>>>>>> Stashed changes
+    print(random.choice(bestiary.search_by_cr(2)))

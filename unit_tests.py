@@ -23,7 +23,7 @@ class DDPPTest(unittest.TestCase):
         test_list = []
         #print(" ", end="", flush=False)
         start = time.time()
-        for i in range(1, 1000):
+        for i in range(1, 100000):
             test_list.append(ddpp.Instructions.s_roll(1, 20))
             # print(f"    {i} ", end="\r", flush=True)
         # print(f"\nfinished rolling, took {time.time()-start}")
@@ -66,17 +66,11 @@ class DatabaseTest(unittest.TestCase):
         """
         test for the bestiary database
         """
-<<<<<<< Updated upstream
-        database = databases.Bestiary()
-        self.assertEqual(len(database.database), 0)
-        database.import_source_data()
-        self.assertGreater(len(database.database), 0)
-=======
         bestiary = databases.Bestiary("name")
         print(bestiary.import_source_data())
-        self.assertIn(bestiary.get_random_entity()["name"], bestiary.db.keys())
+        self.assertIsInstance(bestiary.search_by_name("Bearded Devil"), dict)
+        self.assertIsInstance(bestiary.search_by_cr(10), list)
 
->>>>>>> Stashed changes
 
 
 if __name__ == "__main__":
