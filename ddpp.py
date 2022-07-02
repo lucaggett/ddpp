@@ -12,6 +12,7 @@ from time import sleep
 from ddpp_classes import Config
 import json
 
+from collections import OrderedDict
 
 class Instructions:
     """
@@ -164,86 +165,25 @@ def from_file(filepaths):
 
 def initiative_tracker():
     """
-    TODO: Finish this, it's currently broken and pretty useless
+    WIP
     """
-    initiative_temp = {}
-    active = True
-    initiative = {}
-    number = input("enter the number of entities in the initiative: ")
-    for _ in range(0, int(number)):
-        name = input("enter your entities Name")
-        speed = input("enter the initiative of your Character")
-        if speed == "roll":
-            modifier = input("Enter your creature's initiative modifier")
-            speed = str(Instructions.s_roll(1, 20)[0]) + modifier
-        initiative.update({name: speed})
-    print("beginning initiative")
-    # noinspection PyTypeChecker
-    initiative = dict(
-        sorted(initiative.items(), key=lambda item: item[1], reverse=True)
-    )
-    initiative_temp.update(initiative)
-    while active:
-        initiative.update(initiative_temp)
-        # noinspection PyTypeChecker
-        initiative = dict(
-            sorted(initiative.items(), key=lambda item: item[1], reverse=True)
-        )
-        for entity in initiative:
-            print("Entity:", entity, "| Initiative:", initiative.get(entity))
-            user_input = input()
-            if user_input == "help":
-                print(
-                    "possible commands: add, remove, print, exit (press enter for next creature)"
-                )
-            if user_input == "add":
-                name = input("enter the Name of your creature: ")
-                speed = input("enter the initiative of your creature: ")
-                initiative_temp.update({name: speed})
-                # noinspection PyTypeChecker
-                # initiative_temp = dict(sorted(initiative_temp.items(), key=lambda item: item[1], reverse=True))
-            if user_input == "remove":
-                to_remove = input("enter the Name of the creature you want to remove: ")
-                print(to_remove)
-                pprint(initiative_temp, width=1)
-                if initiative_temp.pop(to_remove, -100) == -100:
-                    print("entity not found")
-                else:
-                    pass
-                    # print(f"{to_remove} will be removed at the start of the initiative")
-            if user_input == "print":
-                pprint(initiative, width=1)
-            if user_input == "exit":
-                active = False
+    print("Welcome to the ddpp initiative tracker!")
+    initial = []
+    while True:
+        c = input("Enter the name of a participating character")
+        i = int(input("Enter the initiative of the character"))
+        initial.append((c, i))
+        if input("press enter to add another character, enter any character to exit"):
+            break
+    initial.sort(key=lambda x: x[1], reverse=True)
+    initiative = OrderedDict()
+    for i in initial:
+        initiative.update({i[0]: i[1]})
+
+    while True:
+        tracker = (c, i for c,i in initiative.items())
 
 
-def death_save():
-    """
-    creates an interactive prompt that helps your roll death saves
-    """
-    failures = 0  # initialise failures and successes to 0
-    successes = 0
-    adv = input("Do you have advantage on death saves? (yes/no)")
-    while failures < 3 and successes < 3:
-        input("Press Enter for your next death save")
-        result = Instructions.s_roll(1, 20)
-        if adv in ("yes", "yup"):
-            advroll = Instructions.s_roll(1, 20)
-            oldroll = result
-            if advroll > result:
-                result = advroll
-            print("You rolled " + str(oldroll) + " and " + str(advroll))
-        else:
-            print("You rolled " + str(result))
-        if result < 10:
-            failures += 1
-        else:
-            successes += 1
-        print(f"Successes: {successes} | Failures: {failures}")
-    if successes == 3:
-        print("You are stable")
-    if failures == 3:
-        print("You are dead")
 
 
 def generate_heist():
