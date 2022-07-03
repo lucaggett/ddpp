@@ -14,6 +14,7 @@ import json
 
 from collections import OrderedDict
 
+
 class Instructions:
     """
     A class holding rolling instructions, which are used to generate random dice rolls
@@ -180,9 +181,26 @@ def initiative_tracker():
     for i in initial:
         initiative.update({i[0]: i[1]})
 
-    while True:
-        tracker = (c, i for c,i in initiative.items())
-
+    done = False
+    while not done:
+        tracker = (c, i for c, i in initiative.items())
+        tracker_not_emtpy = True
+        while tracker_not_emtpy:
+            try:
+                curr_char = next(tracker)
+            except StopIteration:
+                tracker_not_emtpy = False
+                break
+            cmd = input(f"{curr_char}'s turn, press enter to continue, or enter a command")
+            match cmd.split():
+                case "add":
+                    c = input("Enter the name of the character")
+                    i = int(input("Enter the initiative of the character"))
+                case "add", c, i:
+                    initiative.update({c: i})
+                case "remove", *chars:
+                    for char in chars:
+                        pass
 
 
 
