@@ -53,8 +53,8 @@ class Database(ABC):
     """
     this class handles the loading of databases
     """
-    available_sources_creatures = os.listdir(rf"{JSONPATH}\bestiary")
-    available_sources_spells = os.listdir(rf"{JSONPATH}\spells")
+    available_sources_creatures = os.listdir(f"{JSONPATH}/bestiary")
+    available_sources_spells = os.listdir(f"{JSONPATH}/spells")
 
     def __init__(self, database_name: str, filepath: str = JSONPATH, sources=None):
         """
@@ -72,7 +72,7 @@ class Database(ABC):
         """
         returns a list of available sources for the database
         """
-        self.sources = [file for file in os.listdir(rf"{self.filepath}\{self.database_type}") if file.startswith("bestiary")]
+        self.sources = [file for file in os.listdir(f"{self.filepath}/{self.database_type}") if file.startswith("bestiary")]
         print(self.sources)
         return self
 
@@ -92,7 +92,7 @@ class Database(ABC):
         source_data = []
         monsters = {}
         for source in self.sources:
-            with open(fr"{self.filepath}\{self.database_type}\{source}", "r", encoding="utf-8") as file:
+            with open(f"{self.filepath}/{self.database_type}/{source}", "r", encoding="utf-8") as file:
                 source_data.append(json.load(file)["monster"])
         for part in source_data:
             for monster in part:

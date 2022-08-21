@@ -180,9 +180,6 @@ def initiative_tracker():
     for i in initial:
         initiative.update({i[0]: i[1]})
 
-    while True:
-        tracker = (c, i for c,i in initiative.items())
-
 
 
 
