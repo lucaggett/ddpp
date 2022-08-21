@@ -61,15 +61,6 @@ class Config:
         self.variables = {}
         self.filepath = ""
 
-        if platform.system() == "windows":
-            if not os.path.exists(r"C:\Program Files\ddpp"):
-                os.makedirs(r"C:\Program Files\ddpp")
-            self.filepath = r"C:\Program Files\ddpp\config.ddpp"
-        if platform.system() == "Linux" or platform.system() == "linux":
-            if not os.path.exists(r"/usr/local/bin/ddpp"):
-                os.makedirs(r"/usr/local/bin/ddpp")
-            self.filepath = r"/usr/local/bin/ddpp/"
-
     def create_config(self) -> None:
         """
         creates a new shortcut in the config file
